@@ -60,13 +60,22 @@ registerBlockType('lb-jewelry/carousel', {
                 1024: { slidesPerView: 5 },
               }}
             >
-              {products.map((product) => (
-                <SwiperSlide key={product.id}>
-                  {product.images && product.images.length > 0 && (
-                    <img src={product.images[0].src} alt={product.name} />
-                  )}
-                </SwiperSlide>
-              ))}
+              {products.map((product) => {
+                const brandAttr = product.attributes?.find(
+                  (attr) =>
+                    attr.name === 'lux_g_brand' || attr.slug === 'lux_g_brand'
+                );
+                const brand = brandAttr?.options?.[0] || '';
+                return (
+                  <SwiperSlide key={product.id}>
+                    {product.images && product.images.length > 0 && (
+                      <img src={product.images[0].src} alt={product.name} />
+                    )}
+                    {brand && <div className="product-brand">{brand}</div>}
+                    <div className="product-title">{product.name}</div>
+                  </SwiperSlide>
+                );
+              })}
             </Swiper>
           ) : (
             __('Loading products...', 'luxurybazaar_jewelry')

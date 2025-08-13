@@ -20,6 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
             img.src = product.images[0].src;
             img.alt = product.name;
             slide.appendChild(img);
+
+            const brandAttr = product.attributes?.find(
+              (attr) => attr.name === 'lux_g_brand' || attr.slug === 'lux_g_brand'
+            );
+            const brand = brandAttr?.options?.[0];
+            if (brand) {
+              const brandEl = document.createElement('div');
+              brandEl.className = 'product-brand';
+              brandEl.textContent = brand;
+              slide.appendChild(brandEl);
+            }
+
+            const titleEl = document.createElement('div');
+            titleEl.className = 'product-title';
+            titleEl.textContent = product.name;
+            slide.appendChild(titleEl);
+
             wrapper.appendChild(slide);
           }
         });
