@@ -10,23 +10,22 @@ return function( $attributes ) {
     $count   = isset( $attributes['productsToShow'] ) ? intval( $attributes['productsToShow'] ) : 6;
     $preview = ! empty( $attributes['preview'] );
 
-    $args = array(
-        'post_type'      => 'product',
-        'posts_per_page' => $count,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-        'tax_query'      => array(
-            array(
-                'taxonomy' => 'product_cat',
-                'field'    => 'slug',
-                'terms'    => array( 'jewelry' ),
-            ),
-        ),
+    if ( ! function_exists( 'wc_get_products' ) ) {
+        return '';
+    }
+
+    $products = wc_get_products(
+        array(
+            'status'   => 'publish',
+            'limit'    => $count,
+            'orderby'  => 'date',
+            'order'    => 'DESC',
+            'category' => array( 'jewelry' ),
+        )
     );
 
-    $query = new WP_Query( $args );
-    if ( ! $query->have_posts() ) {
-        return '';
+    if ( empty( $products ) ) {
+        return $preview ? '<p>' . esc_html__( 'No jewelry products found.', 'luxurybazaar_jewelry' ) . '</p>' : '';
     }
 
     ob_start();
@@ -38,22 +37,14 @@ return function( $attributes ) {
         <div class="wpgcb-carousel lbj-carousel">
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <?php
-                    while ( $query->have_posts() ) :
-                        $query->the_post();
-                        ?>
+                    <?php foreach ( $products as $product ) : ?>
                         <div class="swiper-slide">
-                            <a href="<?php the_permalink(); ?>">
-                                <?php if ( has_post_thumbnail() ) {
-                                    the_post_thumbnail( 'medium' );
-                                } ?>
-                                <p class="wpgcb-carousel__caption"><?php the_title(); ?></p>
+                            <a href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>">
+                                <?php echo $product->get_image( 'medium' ); ?>
+                                <p class="wpgcb-carousel__caption"><?php echo esc_html( $product->get_name() ); ?></p>
                             </a>
                         </div>
-                        <?php
-                    endwhile;
-                    wp_reset_postdata();
-                    ?>
+                    <?php endforeach; ?>
                 </div>
                 <div class="swiper-pagination"></div>
                 <div class="swiper-button-prev"></div>
@@ -64,4 +55,3 @@ return function( $attributes ) {
     <?php
     return ob_get_clean();
 };
-
