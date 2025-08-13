@@ -1,11 +1,13 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect } from '@wordpress/element';
 import {
+  MediaUpload,
+  MediaUploadCheck,
   useBlockProps,
   InspectorControls
 } from '@wordpress/block-editor';
 import {
+  Button,
   PanelBody,
   ToggleControl
 } from '@wordpress/components';
@@ -19,15 +21,12 @@ import './editor.css';
 
 registerBlockType('lb-jewelry/carousel', {
   edit: ({ attributes, setAttributes }) => {
-    const { autoplay = false, loop = false } = attributes;
+    const { images = [], autoplay = false, loop = false } = attributes;
     const blockProps = useBlockProps({ className: 'wpgcb-carousel' });
-    const [products, setProducts] = useState([]);
 
-    useEffect(() => {
-      fetch('/wp-json/wc/store/products?product_cat=jewelry&per_page=10')
-        .then((res) => res.json())
-        .then((data) => setProducts(data));
-    }, []);
+    const onSelectImages = (newImages) => {
+      setAttributes({ images: newImages.map((img) => img.url) });
+    };
 
     return (
       <>
@@ -46,37 +45,40 @@ registerBlockType('lb-jewelry/carousel', {
           </PanelBody>
         </InspectorControls>
         <div {...blockProps}>
-          {products.length ? (
+          <MediaUploadCheck>
+            <MediaUpload
+              onSelect={onSelectImages}
+              allowedTypes={['image']}
+              multiple
+              gallery
+              render={({ open }) => (
+                <Button variant="primary" onClick={open}>
+                  { images.length ? __('Edit images', 'luxurybazaar_jewelry') : __('Add images', 'luxurybazaar_jewelry') }
+                </Button>
+              )}
+            />
+          </MediaUploadCheck>
+          {images.length > 0 && (
             <Swiper
               modules={[Navigation, Pagination, Autoplay]}
               navigation
               pagination={{ clickable: true }}
               autoplay={autoplay ? { delay: 3000 } : false}
               loop={loop}
-              slidesPerView={1}
-              breakpoints={{
-                480: { slidesPerView: 2 },
-                768: { slidesPerView: 3 },
-                1024: { slidesPerView: 5 },
-              }}
             >
-              {products.map((product) => (
-                <SwiperSlide key={product.id}>
-                  {product.images && product.images.length > 0 && (
-                    <img src={product.images[0].src} alt={product.name} />
-                  )}
+              {images.map((src, index) => (
+                <SwiperSlide key={index}>
+                  <img src={src} alt="" />
                 </SwiperSlide>
               ))}
             </Swiper>
-          ) : (
-            __('Loading products...', 'luxurybazaar_jewelry')
           )}
         </div>
       </>
     );
   },
   save: ({ attributes }) => {
-    const { autoplay = false, loop = false } = attributes;
+    const { images = [], autoplay = false, loop = false } = attributes;
     const blockProps = useBlockProps.save({
       className: 'wpgcb-carousel swiper',
       'data-autoplay': autoplay,
@@ -84,7 +86,13 @@ registerBlockType('lb-jewelry/carousel', {
     });
     return (
       <div {...blockProps}>
-        <div className="swiper-wrapper"></div>
+        <div className="swiper-wrapper">
+          {images.map((src, index) => (
+            <div className="swiper-slide" key={index}>
+              <img src={src} alt="" />
+            </div>
+          ))}
+        </div>
         <div className="swiper-button-prev"></div>
         <div className="swiper-button-next"></div>
         <div className="swiper-pagination"></div>

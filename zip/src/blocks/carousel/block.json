@@ -1,0 +1,21 @@
+{
+  "apiVersion": 2,
+  "name": "lb-jewelry/carousel",
+  "title": "LBJ - Carousel",
+  "category": "media",
+  "icon": "images-alt2",
+  "description": "Image carousel block.",
+  "textdomain": "luxurybazaar_jewelry",
+  "attributes": {
+    "images": { "type": "array", "default": [] },
+    "autoplay": { "type": "boolean", "default": false },
+    "loop": { "type": "boolean", "default": false }
+  },
+  "supports": {
+    "html": false
+  },
+  "editorScript": "file:./index.js",
+  "viewScript": "file:./view.js",
+  "style": "file:./style-index.css",
+  "editorStyle": "file:./index.css"
+}

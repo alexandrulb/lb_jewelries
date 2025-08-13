@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.wpgcb-carousel').forEach((el) => {
     const autoplay = el.dataset.autoplay === 'true';
     const loop = el.dataset.loop === 'true';
-    fetch('/wp-json/wc/store/products?category=jewelry&per_page=10')
+    fetch('/wp-json/wc/store/products?product_cat=jewelry&per_page=10')
       .then((res) => res.json())
       .then((products) => {
         const wrapper = el.querySelector('.swiper-wrapper');
