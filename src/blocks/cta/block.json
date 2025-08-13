@@ -1,7 +1,7 @@
 {
   "apiVersion": 3,
   "name": "lb_jewelry/cta",
-  "title": "Call to Action",
+  "title": "Jewelry Call to Action",
   "category": "design",
   "icon": "megaphone",
   "description": "A simple CTA with headline, text, and button.",
