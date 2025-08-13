@@ -1,0 +1,2 @@
+.wpgcb-carousel { display:flex; overflow-x:auto; gap:1rem; }
+.wpgcb-carousel__image { flex:0 0 auto; width:200px; height:auto; }
