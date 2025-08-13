@@ -4,10 +4,9 @@
   "title": "LBJ - Carousel",
   "category": "media",
   "icon": "images-alt2",
-  "description": "Image carousel block.",
+  "description": "Product carousel block.",
   "textdomain": "luxurybazaar_jewelry",
   "attributes": {
-    "images": { "type": "array", "default": [] },
     "autoplay": { "type": "boolean", "default": false },
     "loop": { "type": "boolean", "default": false }
   },
