@@ -1,5 +1,5 @@
 .wpgcb-hero { position:relative; display:grid; place-items:center; text-align:center; color:var(--wp--preset--color--base,#fff); padding:var(--wp--preset--spacing--30,2rem); overflow:hidden; width:100%; }
-.wpgcb-hero__cover { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; filter:saturate(1.05); }
+.wpgcb-hero__cover { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; filter:saturate(1.05); }
 .wpgcb-hero__overlay { position:absolute; inset:0; background:#000; z-index:1; }
 .wpgcb-hero__content { position:relative; z-index:2; max-width:900px; }
 .wpgcb-hero__title { margin:0 0 .5rem; font-size:clamp(2rem,4vw,3rem); }
