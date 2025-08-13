@@ -1,0 +1,24 @@
+{
+  "apiVersion": 3,
+  "name": "lb_jewelry/hero",
+  "title": "Hero",
+  "category": "design",
+  "icon": "format-image",
+  "description": "A simple hero with background image, title, and subtitle.",
+  "textdomain": "lb_jewelry",
+  "attributes": {
+    "title": { "type": "string", "default": "Your Hero Title" },
+    "subtitle": { "type": "string", "default": "A short supporting subtitle goes here." },
+    "mediaURL": { "type": "string", "default": "" },
+    "overlayOpacity": { "type": "number", "default": 0.35 },
+    "minHeight": { "type": "number", "default": 420 }
+  },
+  "supports": {
+    "html": false,
+    "spacing": { "padding": true, "margin": true },
+    "color": { "text": true }
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./style.css",
+  "editorStyle": "file:./editor.css"
+}

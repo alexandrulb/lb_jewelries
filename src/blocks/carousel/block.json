@@ -1,0 +1,19 @@
+{
+  "apiVersion": 3,
+  "name": "lb_jewelry/carousel",
+  "title": "Carousel (Swiper)",
+  "category": "media",
+  "icon": "images-alt2",
+  "description": "Image carousel using Swiper with pagination and arrows.",
+  "textdomain": "lb_jewelry",
+  "attributes": {
+    "slides": {
+      "type": "array",
+      "default": [],
+      "items": { "type": "object" }
+    }
+  },
+  "supports": { "html": false },
+  "editorScript": "file:./index.js",
+  "style": "file:./style.css"
+}

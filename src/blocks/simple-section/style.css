@@ -1,0 +1,11 @@
+.lb_jewelry-section {
+  margin-left: auto;
+  margin-right: auto;
+  padding: var(--wp--preset--spacing--30, 2rem);
+}
+.lb_jewelry-section--full {
+  width: 100%;
+}
+.lb_jewelry-section--contained {
+  width: 100%;
+}

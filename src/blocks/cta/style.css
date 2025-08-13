@@ -1,0 +1,20 @@
+.lb_jewelry-cta {
+  text-align: center;
+  border-radius: 12px;
+  padding: var(--wp--preset--spacing--40, 3rem);
+  background: var(--wp--preset--color--contrast, #111);
+  color: var(--wp--preset--color--base, #fff);
+}
+.lb_jewelry-cta__heading { margin: 0 0 .5rem; font-size: clamp(1.5rem, 3vw, 2rem); }
+.lb_jewelry-cta__text { margin: 0 0 1rem; opacity: .9; }
+.lb_jewelry-cta__actions { display: flex; justify-content: center; gap: .75rem; flex-wrap: wrap; }
+.lb_jewelry-cta__button {
+  display: inline-block;
+  text-decoration: none;
+  padding: .75rem 1.25rem;
+  border-radius: 999px;
+  background: var(--wp--preset--color--base, #fff);
+  color: var(--wp--preset--color--contrast, #111);
+  font-weight: 600;
+}
+.lb_jewelry-cta__button:hover { opacity: .9; }
