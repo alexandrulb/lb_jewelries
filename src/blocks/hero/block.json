@@ -4,19 +4,21 @@
   "title": "LBJ - Hero",
   "category": "design",
   "icon": "format-image",
-  "description": "Hero with background image, overlay, title & subtitle.",
+  "description": "Hero with full-width cover image, overlay, title & subtitle.",
   "textdomain": "luxurybazaar_jewelry",
   "attributes": {
     "title": { "type": "string", "default": "Your Hero Title" },
     "subtitle": { "type": "string", "default": "A short supporting subtitle goes here." },
-    "mediaURL": { "type": "string", "default": "" },
+    "coverURL": { "type": "string", "default": "" },
     "overlayOpacity": { "type": "number", "default": 0.35 },
-    "minHeight": { "type": "number", "default": 420 }
+    "minHeight": { "type": "number", "default": 420 },
+    "align": { "type": "string", "default": "full" }
   },
   "supports": {
     "html": false,
     "spacing": { "padding": true, "margin": true },
-    "color": { "text": true }
+    "color": { "text": true },
+    "align": ["full"]
   },
   "editorScript": "file:./index.js",
   "style": "file:./style.css",
