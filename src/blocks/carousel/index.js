@@ -2,9 +2,10 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { MediaUpload, MediaUploadCheck, RichText, useBlockProps } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
+import metadata from './block.json';
 import './style.css';
 
-registerBlockType('lb_jewelry/carousel', {
+registerBlockType(metadata, {
   edit: ({ attributes, setAttributes }) => {
     const { slides = [] } = attributes;
     const blockProps = useBlockProps({ className: 'lb_jewelry-carousel' });

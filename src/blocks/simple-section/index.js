@@ -2,10 +2,11 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl, RangeControl } from '@wordpress/components';
+import metadata from './block.json';
 import './style.css';
 import './editor.css';
 
-registerBlockType('lb_jewelry/simple-section', {
+registerBlockType(metadata, {
   edit: ({ attributes, setAttributes }) => {
     const { contained, maxWidth } = attributes;
     const blockProps = useBlockProps({
