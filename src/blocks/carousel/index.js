@@ -2,13 +2,12 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { MediaUpload, MediaUploadCheck, RichText, useBlockProps } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
-import metadata from './block.json';
 import './style.css';
 
-registerBlockType(metadata, {
+registerBlockType('lb-jewelry/carousel', {
   edit: ({ attributes, setAttributes }) => {
     const { slides = [] } = attributes;
-    const blockProps = useBlockProps({ className: 'lb_jewelry-carousel' });
+    const blockProps = useBlockProps({ className: 'wpgcb-carousel' });
 
     const addSlide = (media) => {
       const next = [ ...slides, { url: media.url, alt: media.alt || '', caption: '' } ];
@@ -27,7 +26,7 @@ registerBlockType(metadata, {
 
     return (
       <div {...blockProps}>
-        <div className="lb_jewelry-carousel__controls">
+        <div className="wpgcb-carousel__controls">
           <MediaUploadCheck>
             <MediaUpload
               onSelect={addSlide}
@@ -35,25 +34,25 @@ registerBlockType(metadata, {
               multiple={false}
               render={({ open }) => (
                 <Button variant="primary" onClick={open}>
-                  {__('Add image', 'lb_jewelry')}
+                  {__('Add image', 'luxurybazaar_jewelry')}
                 </Button>
               )}
             />
           </MediaUploadCheck>
         </div>
-        <div className="lb_jewelry-carousel__editor-list">
-          {slides.length === 0 && <p>{__('No slides yet. Use “Add image”.', 'lb_jewelry')}</p>}
+        <div className="wpgcb-carousel__editor-list">
+          {slides.length === 0 && <p>{__('No slides yet. Use “Add image”.', 'luxurybazaar_jewelry')}</p>}
           {slides.map((s, i) => (
-            <div key={i} className="lb_jewelry-carousel__editor-item">
+            <div key={i} className="wpgcb-carousel__editor-item">
               <img src={s.url} alt={s.alt || ''} />
               <RichText
                 tagName="p"
-                className="lb_jewelry-carousel__caption"
+                className="wpgcb-carousel__caption"
                 value={s.caption}
                 onChange={(v) => updateCaption(i, v)}
-                placeholder={__('Add caption…', 'lb_jewelry')}
+                placeholder={__('Add caption…', 'luxurybazaar_jewelry')}
               />
-              <Button variant="secondary" onClick={() => removeSlide(i)}>{__('Remove', 'lb_jewelry')}</Button>
+              <Button variant="secondary" onClick={() => removeSlide(i)}>{__('Remove', 'luxurybazaar_jewelry')}</Button>
             </div>
           ))}
         </div>
@@ -62,7 +61,7 @@ registerBlockType(metadata, {
   },
   save: ({ attributes }) => {
     const { slides = [] } = attributes;
-    const blockProps = useBlockProps.save({ className: 'lb_jewelry-carousel' });
+    const blockProps = useBlockProps.save({ className: 'wpgcb-carousel lbj-carousel' });
     return (
       <div {...blockProps}>
         <div className="swiper">
@@ -70,7 +69,7 @@ registerBlockType(metadata, {
             {slides.map((s, i) => (
               <div key={i} className="swiper-slide">
                 <img src={s.url} alt={s.alt || ''} />
-                {s.caption && <p className="lb_jewelry-carousel__caption">{s.caption}</p>}
+                {s.caption && <p className="wpgcb-carousel__caption">{s.caption}</p>}
               </div>
             ))}
           </div>

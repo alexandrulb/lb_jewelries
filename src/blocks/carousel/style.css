@@ -1,8 +1,8 @@
-.lb_jewelry-carousel .swiper { width: 100%; }
-.lb_jewelry-carousel .swiper-slide { display: grid; justify-items: center; gap: .5rem; }
-.lb_jewelry-carousel img { width: 100%; height: auto; border-radius: 12px; display: block; }
-.lb_jewelry-carousel__caption { margin: .25rem 0 0; font-size: .95rem; opacity: .9; text-align: center; }
-.lb_jewelry-carousel__controls { margin-bottom: .75rem; }
-.lb_jewelry-carousel__editor-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .75rem; }
-.lb_jewelry-carousel__editor-item { border: 1px solid #e3e3e3; border-radius: 8px; padding: .5rem; background: #fff; }
-.lb_jewelry-carousel__editor-item img { width: 100%; height: auto; border-radius: 6px; }
+.wpgcb-carousel .swiper { width:100%; }
+.wpgcb-carousel .swiper-slide { display:grid; justify-items:center; gap:.5rem; }
+.wpgcb-carousel img { width:100%; height:auto; border-radius:12px; display:block; }
+.wpgcb-carousel__caption { margin:.25rem 0 0; font-size:.95rem; opacity:.9; text-align:center; }
+.wpgcb-carousel__controls { margin-bottom:.75rem; }
+.wpgcb-carousel__editor-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:.75rem; }
+.wpgcb-carousel__editor-item { border:1px solid #e3e3e3; border-radius:8px; padding:.5rem; background:#fff; }
+.wpgcb-carousel__editor-item img { width:100%; height:auto; border-radius:6px; }

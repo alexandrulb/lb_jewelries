@@ -1,22 +1,15 @@
 {
-  "apiVersion": 3,
-  "name": "lb_jewelry/simple-section",
-  "title": "Jewelry Section",
+  "apiVersion": 2,
+  "name": "lb-jewelry/simple-section",
+  "title": "LBJ - Section",
   "category": "layout",
   "icon": "index-card",
-  "description": "A flexible section wrapper with padding, max-width, and background options. Allows any inner blocks.",
-  "textdomain": "lb_jewelry",
+  "description": "Flexible section wrapper (contained/full). Accepts InnerBlocks.",
+  "textdomain": "luxurybazaar_jewelry",
   "supports": {
     "html": false,
-    "spacing": {
-      "padding": true,
-      "margin": true
-    },
-    "color": {
-      "background": true,
-      "text": true,
-      "gradients": true
-    }
+    "spacing": { "padding": true, "margin": true },
+    "color": { "background": true, "text": true, "gradients": true }
   },
   "attributes": {
     "contained": { "type": "boolean", "default": true },

@@ -1,11 +1,11 @@
 {
-  "apiVersion": 3,
-  "name": "lb_jewelry/carousel",
-  "title": "Jewelry Carousel (Swiper)",
+  "apiVersion": 2,
+  "name": "lb-jewelry/carousel",
+  "title": "LBJ - Carousel (Swiper)",
   "category": "media",
   "icon": "images-alt2",
   "description": "Image carousel using Swiper with pagination and arrows.",
-  "textdomain": "lb_jewelry",
+  "textdomain": "luxurybazaar_jewelry",
   "attributes": {
     "slides": {
       "type": "array",
