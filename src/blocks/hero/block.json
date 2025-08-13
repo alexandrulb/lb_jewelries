@@ -11,14 +11,14 @@
     "subtitle": { "type": "string", "default": "A short supporting subtitle goes here." },
     "coverURL": { "type": "string", "default": "" },
     "overlayOpacity": { "type": "number", "default": 0.35 },
-    "minHeight": { "type": "number", "default": 420 },
     "align": { "type": "string", "default": "full" }
   },
   "supports": {
     "html": false,
     "spacing": { "padding": true, "margin": true },
     "color": { "text": true },
-    "align": ["full"]
+    "align": ["full"],
+    "dimensions": { "minHeight": false }
   },
   "editorScript": "file:./index.js",
   "style": "file:./style-index.css",

@@ -7,7 +7,7 @@ import './editor.css';
 
 registerBlockType('lb-jewelry/hero', {
   edit: ({ attributes, setAttributes }) => {
-    const { title, subtitle, coverURL, overlayOpacity, minHeight } = attributes;
+    const { title, subtitle, coverURL, overlayOpacity } = attributes;
     const blockProps = useBlockProps({ className: 'wpgcb-hero' });
 
     return (
@@ -31,17 +31,9 @@ registerBlockType('lb-jewelry/hero', {
               max={0.8}
               step={0.05}
             />
-            <RangeControl
-              label={__('Minimum height (px)', 'luxurybazaar_jewelry')}
-              value={minHeight}
-              onChange={(v) => setAttributes({ minHeight: v })}
-              min={280}
-              max={800}
-              step={10}
-            />
           </PanelBody>
         </InspectorControls>
-        <div {...blockProps} style={{ minHeight: minHeight + 'px' }}>
+        <div {...blockProps}>
           {coverURL && <img className="wpgcb-hero__cover" src={coverURL} alt="" />}
           <div className="wpgcb-hero__overlay" style={{ opacity: overlayOpacity }} />
           <div className="wpgcb-hero__rect wpgcb-hero__rect--left" />
@@ -67,8 +59,8 @@ registerBlockType('lb-jewelry/hero', {
     );
   },
   save: ({ attributes }) => {
-    const { title, subtitle, coverURL, overlayOpacity, minHeight } = attributes;
-    const blockProps = useBlockProps.save({ className: 'wpgcb-hero', style: { minHeight: minHeight + 'px' } });
+    const { title, subtitle, coverURL, overlayOpacity } = attributes;
+    const blockProps = useBlockProps.save({ className: 'wpgcb-hero' });
     return (
       <div {...blockProps}>
         {coverURL && <img className="wpgcb-hero__cover" src={coverURL} alt="" />}
