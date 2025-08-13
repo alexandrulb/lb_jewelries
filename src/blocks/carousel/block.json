@@ -7,12 +7,18 @@
   "description": "Image carousel block.",
   "textdomain": "luxurybazaar_jewelry",
   "attributes": {
-    "images": { "type": "array", "default": [] }
+    "images": { "type": "array", "default": [] },
+    "autoplay": { "type": "boolean", "default": true },
+    "autoplayDelay": { "type": "number", "default": 3000 },
+    "loop": { "type": "boolean", "default": true },
+    "showPagination": { "type": "boolean", "default": true },
+    "showNavigation": { "type": "boolean", "default": true }
   },
   "supports": {
     "html": false
   },
   "editorScript": "file:./index.js",
+  "viewScript": "file:./view.js",
   "style": "file:./style-index.css",
   "editorStyle": "file:./index.css"
 }
