@@ -1,2 +1,14 @@
-.wpgcb-carousel .swiper { width:100%; }
-.wpgcb-carousel__image { display:block; width:100%; height:auto; }
+.wpgcb-carousel {
+  position: relative;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: #fff;
+}

@@ -1,15 +1,14 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import {
-  InspectorControls,
   MediaUpload,
   MediaUploadCheck,
-  useBlockProps
+  useBlockProps,
+  InspectorControls
 } from '@wordpress/block-editor';
 import {
   Button,
   PanelBody,
-  RangeControl,
   ToggleControl
 } from '@wordpress/components';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,14 +21,7 @@ import './editor.css';
 
 registerBlockType('lb-jewelry/carousel', {
   edit: ({ attributes, setAttributes }) => {
-    const {
-      images = [],
-      autoplay,
-      autoplayDelay,
-      loop,
-      showPagination,
-      showNavigation
-    } = attributes;
+    const { images = [], autoplay = false, loop = false } = attributes;
     const blockProps = useBlockProps({ className: 'wpgcb-carousel' });
 
     const onSelectImages = (newImages) => {
@@ -39,36 +31,16 @@ registerBlockType('lb-jewelry/carousel', {
     return (
       <>
         <InspectorControls>
-          <PanelBody title={__('Carousel Settings', 'luxurybazaar_jewelry')}>
+          <PanelBody title={__('Carousel Settings', 'luxurybazaar_jewelry')} initialOpen={true}>
             <ToggleControl
               label={__('Autoplay', 'luxurybazaar_jewelry')}
               checked={autoplay}
-              onChange={(v) => setAttributes({ autoplay: v })}
+              onChange={(value) => setAttributes({ autoplay: value })}
             />
-            {autoplay && (
-              <RangeControl
-                label={__('Autoplay delay (ms)', 'luxurybazaar_jewelry')}
-                value={autoplayDelay}
-                onChange={(v) => setAttributes({ autoplayDelay: v })}
-                min={1000}
-                max={10000}
-                step={500}
-              />
-            )}
             <ToggleControl
               label={__('Loop', 'luxurybazaar_jewelry')}
               checked={loop}
-              onChange={(v) => setAttributes({ loop: v })}
-            />
-            <ToggleControl
-              label={__('Show Pagination', 'luxurybazaar_jewelry')}
-              checked={showPagination}
-              onChange={(v) => setAttributes({ showPagination: v })}
-            />
-            <ToggleControl
-              label={__('Show Navigation', 'luxurybazaar_jewelry')}
-              checked={showNavigation}
-              onChange={(v) => setAttributes({ showNavigation: v })}
+              onChange={(value) => setAttributes({ loop: value })}
             />
           </PanelBody>
         </InspectorControls>
@@ -89,14 +61,14 @@ registerBlockType('lb-jewelry/carousel', {
           {images.length > 0 && (
             <Swiper
               modules={[Navigation, Pagination, Autoplay]}
+              navigation
+              pagination={{ clickable: true }}
+              autoplay={autoplay ? { delay: 3000 } : false}
               loop={loop}
-              autoplay={autoplay ? { delay: autoplayDelay } : false}
-              pagination={showPagination ? { clickable: true } : false}
-              navigation={showNavigation}
             >
               {images.map((src, index) => (
                 <SwiperSlide key={index}>
-                  <img src={src} className="wpgcb-carousel__image" alt="" />
+                  <img src={src} alt="" />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -106,39 +78,24 @@ registerBlockType('lb-jewelry/carousel', {
     );
   },
   save: ({ attributes }) => {
-    const {
-      images = [],
-      autoplay,
-      autoplayDelay,
-      loop,
-      showPagination,
-      showNavigation
-    } = attributes;
+    const { images = [], autoplay = false, loop = false } = attributes;
     const blockProps = useBlockProps.save({
-      className: 'wpgcb-carousel',
-      'data-autoplay': autoplay ? autoplayDelay : 0,
-      'data-loop': loop,
-      'data-pagination': showPagination,
-      'data-navigation': showNavigation
+      className: 'wpgcb-carousel swiper',
+      'data-autoplay': autoplay,
+      'data-loop': loop
     });
     return (
       <div {...blockProps}>
-        <div className="swiper">
-          <div className="swiper-wrapper">
-            {images.map((src, index) => (
-              <div className="swiper-slide" key={index}>
-                <img src={src} className="wpgcb-carousel__image" alt="" />
-              </div>
-            ))}
-          </div>
-          {showPagination && <div className="swiper-pagination" />}
-          {showNavigation && (
-            <>
-              <div className="swiper-button-prev" />
-              <div className="swiper-button-next" />
-            </>
-          )}
+        <div className="swiper-wrapper">
+          {images.map((src, index) => (
+            <div className="swiper-slide" key={index}>
+              <img src={src} alt="" />
+            </div>
+          ))}
         </div>
+        <div className="swiper-button-prev"></div>
+        <div className="swiper-button-next"></div>
+        <div className="swiper-pagination"></div>
       </div>
     );
   }
