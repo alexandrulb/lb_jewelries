@@ -7,19 +7,19 @@ import './editor.css';
 
 registerBlockType('lb-jewelry/hero', {
   edit: ({ attributes, setAttributes }) => {
-    const { title, subtitle, mediaURL, overlayOpacity, minHeight } = attributes;
+    const { title, subtitle, coverURL, overlayOpacity, minHeight } = attributes;
     const blockProps = useBlockProps({ className: 'wpgcb-hero' });
 
     return (
       <>
         <InspectorControls>
-          <PanelBody title={__('Background', 'luxurybazaar_jewelry')} initialOpen={true}>
+          <PanelBody title={__('Cover Image', 'luxurybazaar_jewelry')} initialOpen={true}>
             <MediaUpload
-              onSelect={(media) => setAttributes({ mediaURL: media.url })}
+              onSelect={(media) => setAttributes({ coverURL: media.url })}
               allowedTypes={['image']}
               render={({ open }) => (
                 <Button variant="primary" onClick={open}>
-                  { mediaURL ? __('Change image', 'luxurybazaar_jewelry') : __('Choose image', 'luxurybazaar_jewelry') }
+                  { coverURL ? __('Change cover', 'luxurybazaar_jewelry') : __('Choose cover', 'luxurybazaar_jewelry') }
                 </Button>
               )}
             />
@@ -42,8 +42,10 @@ registerBlockType('lb-jewelry/hero', {
           </PanelBody>
         </InspectorControls>
         <div {...blockProps} style={{ minHeight: minHeight + 'px' }}>
-          {mediaURL && <div className="wpgcb-hero__bg" style={{ backgroundImage: `url(${mediaURL})` }} />}
+          {coverURL && <img className="wpgcb-hero__cover" src={coverURL} alt="" />}
           <div className="wpgcb-hero__overlay" style={{ opacity: overlayOpacity }} />
+          <div className="wpgcb-hero__rect wpgcb-hero__rect--left" />
+          <div className="wpgcb-hero__rect wpgcb-hero__rect--right" />
           <div className="wpgcb-hero__content">
             <RichText
               tagName="h1"
@@ -65,12 +67,14 @@ registerBlockType('lb-jewelry/hero', {
     );
   },
   save: ({ attributes }) => {
-    const { title, subtitle, mediaURL, overlayOpacity, minHeight } = attributes;
+    const { title, subtitle, coverURL, overlayOpacity, minHeight } = attributes;
     const blockProps = useBlockProps.save({ className: 'wpgcb-hero', style: { minHeight: minHeight + 'px' } });
     return (
       <div {...blockProps}>
-        {mediaURL && <div className="wpgcb-hero__bg" style={{ backgroundImage: `url(${mediaURL})` }} />}
+        {coverURL && <img className="wpgcb-hero__cover" src={coverURL} alt="" />}
         <div className="wpgcb-hero__overlay" style={{ opacity: overlayOpacity }} />
+        <div className="wpgcb-hero__rect wpgcb-hero__rect--left" />
+        <div className="wpgcb-hero__rect wpgcb-hero__rect--right" />
         <div className="wpgcb-hero__content">
           <RichText.Content tagName="h1" className="wpgcb-hero__title" value={title} />
           <RichText.Content tagName="p" className="wpgcb-hero__subtitle" value={subtitle} />
