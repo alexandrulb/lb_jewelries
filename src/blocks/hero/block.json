@@ -17,7 +17,8 @@
     "html": false,
     "spacing": { "padding": true, "margin": true },
     "color": { "text": true },
-    "align": ["full"]
+    "align": ["full"],
+    "dimensions": { "minHeight": false }
   },
   "editorScript": "file:./index.js",
   "style": "file:./style-index.css",
