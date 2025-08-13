@@ -1,7 +1,7 @@
 {
   "apiVersion": 3,
   "name": "lb_jewelry/carousel",
-  "title": "Carousel (Swiper)",
+  "title": "Jewelry Carousel (Swiper)",
   "category": "media",
   "icon": "images-alt2",
   "description": "Image carousel using Swiper with pagination and arrows.",
