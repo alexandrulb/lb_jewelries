@@ -44,6 +44,8 @@ registerBlockType('lb-jewelry/hero', {
         <div {...blockProps} style={{ minHeight: minHeight + 'px' }}>
           {coverURL && <img className="wpgcb-hero__cover" src={coverURL} alt="" />}
           <div className="wpgcb-hero__overlay" style={{ opacity: overlayOpacity }} />
+          <div className="wpgcb-hero__rect wpgcb-hero__rect--left" />
+          <div className="wpgcb-hero__rect wpgcb-hero__rect--right" />
           <div className="wpgcb-hero__content">
             <RichText
               tagName="h1"
@@ -71,6 +73,8 @@ registerBlockType('lb-jewelry/hero', {
       <div {...blockProps}>
         {coverURL && <img className="wpgcb-hero__cover" src={coverURL} alt="" />}
         <div className="wpgcb-hero__overlay" style={{ opacity: overlayOpacity }} />
+        <div className="wpgcb-hero__rect wpgcb-hero__rect--left" />
+        <div className="wpgcb-hero__rect wpgcb-hero__rect--right" />
         <div className="wpgcb-hero__content">
           <RichText.Content tagName="h1" className="wpgcb-hero__title" value={title} />
           <RichText.Content tagName="p" className="wpgcb-hero__subtitle" value={subtitle} />
