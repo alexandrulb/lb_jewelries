@@ -42,8 +42,10 @@ registerBlockType('lb-jewelry/hero', {
           </PanelBody>
         </InspectorControls>
         <div {...blockProps} style={{ minHeight: minHeight + 'px' }}>
-          {coverURL && <div className="wpgcb-hero__cover" style={{ backgroundImage: `url(${coverURL})` }} />}
+          {coverURL && <img className="wpgcb-hero__cover" src={coverURL} alt="" />}
           <div className="wpgcb-hero__overlay" style={{ opacity: overlayOpacity }} />
+          <div className="wpgcb-hero__rect wpgcb-hero__rect--left" />
+          <div className="wpgcb-hero__rect wpgcb-hero__rect--right" />
           <div className="wpgcb-hero__content">
             <RichText
               tagName="h1"
@@ -69,8 +71,10 @@ registerBlockType('lb-jewelry/hero', {
     const blockProps = useBlockProps.save({ className: 'wpgcb-hero', style: { minHeight: minHeight + 'px' } });
     return (
       <div {...blockProps}>
-        {coverURL && <div className="wpgcb-hero__cover" style={{ backgroundImage: `url(${coverURL})` }} />}
+        {coverURL && <img className="wpgcb-hero__cover" src={coverURL} alt="" />}
         <div className="wpgcb-hero__overlay" style={{ opacity: overlayOpacity }} />
+        <div className="wpgcb-hero__rect wpgcb-hero__rect--left" />
+        <div className="wpgcb-hero__rect wpgcb-hero__rect--right" />
         <div className="wpgcb-hero__content">
           <RichText.Content tagName="h1" className="wpgcb-hero__title" value={title} />
           <RichText.Content tagName="p" className="wpgcb-hero__subtitle" value={subtitle} />

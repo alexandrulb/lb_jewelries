@@ -55,4 +55,3 @@ return function( $attributes ) {
     <?php
     return ob_get_clean();
 };
-
