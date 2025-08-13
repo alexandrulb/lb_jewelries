@@ -1,11 +1,28 @@
 .wpgcb-carousel {
   position: relative;
+  width: 100%;
+  max-width: 1329px;
+  margin: 0 auto;
 }
 
 .swiper-slide img {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.product-brand {
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.product-title {
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .swiper-button-prev,
