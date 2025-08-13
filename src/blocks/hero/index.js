@@ -2,10 +2,11 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, MediaUpload, RichText, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, RangeControl, Button } from '@wordpress/components';
+import metadata from './block.json';
 import './style.css';
 import './editor.css';
 
-registerBlockType('lb_jewelry/hero', {
+registerBlockType(metadata, {
   edit: ({ attributes, setAttributes }) => {
     const { title, subtitle, mediaURL, overlayOpacity, minHeight } = attributes;
     const blockProps = useBlockProps({ className: 'lb_jewelry-hero' });

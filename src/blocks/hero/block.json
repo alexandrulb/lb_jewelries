@@ -1,7 +1,7 @@
 {
   "apiVersion": 3,
   "name": "lb_jewelry/hero",
-  "title": "Hero",
+  "title": "Jewelry Hero",
   "category": "design",
   "icon": "format-image",
   "description": "A simple hero with background image, title, and subtitle.",

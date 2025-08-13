@@ -1,9 +1,10 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { RichText, URLInputButton, useBlockProps } from '@wordpress/block-editor';
+import metadata from './block.json';
 import './style.css';
 
-registerBlockType('lb_jewelry/cta', {
+registerBlockType(metadata, {
   edit: ({ attributes, setAttributes }) => {
     const { heading, text, buttonLabel, buttonURL } = attributes;
     const blockProps = useBlockProps({ className: 'lb_jewelry-cta' });

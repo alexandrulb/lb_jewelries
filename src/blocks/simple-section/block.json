@@ -1,7 +1,7 @@
 {
   "apiVersion": 3,
   "name": "lb_jewelry/simple-section",
-  "title": "Section",
+  "title": "Jewelry Section",
   "category": "layout",
   "icon": "index-card",
   "description": "A flexible section wrapper with padding, max-width, and background options. Allows any inner blocks.",
