@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const loop = el.dataset.loop === 'true';
     new Swiper(el, {
       modules: [Navigation, Pagination, Autoplay],
+      slidesPerView: 1,
+      breakpoints: {
+        480: { slidesPerView: 2 },
+        768: { slidesPerView: 3 },
+        1024: { slidesPerView: 5 },
+      },
       navigation: {
         nextEl: el.querySelector('.swiper-button-next'),
         prevEl: el.querySelector('.swiper-button-prev'),

@@ -65,6 +65,12 @@ registerBlockType('lb-jewelry/carousel', {
               pagination={{ clickable: true }}
               autoplay={autoplay ? { delay: 3000 } : false}
               loop={loop}
+              slidesPerView={1}
+              breakpoints={{
+                480: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                1024: { slidesPerView: 5 },
+              }}
             >
               {images.map((src, index) => (
                 <SwiperSlide key={index}>
