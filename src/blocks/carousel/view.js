@@ -51,6 +51,13 @@ function initCarousels() {
     const loop = el.dataset.loop === 'true';
     const mode = el.dataset.mode || 'latest';
     const wrapper = el.querySelector('.swiper-wrapper');
+    const hasSlides = wrapper && wrapper.children.length > 0;
+
+    // Skip initialization if there are no slides for custom mode
+    if (!hasSlides && mode !== 'latest') {
+      el.dataset.initialized = 'true';
+      return;
+    }
 
     // Generate unique selectors for navigation/pagination to prevent cross-instance collisions
     const nextClass = `swiper-button-next-${index}`;
@@ -88,7 +95,7 @@ function initCarousels() {
     };
 
     // Fetch latest products only if we are in "latest" mode and no slides exist yet
-    if (mode === 'latest' && wrapper && wrapper.children.length === 0) {
+    if (mode === 'latest' && !hasSlides) {
       const url =
         '/wp-json/wc/store/v1/products' +
         '?attributes[0][attribute]=pa_product_type' +
@@ -100,11 +107,11 @@ function initCarousels() {
         .then((products) => {
           if (!Array.isArray(products)) return;
           // Clear any existing slides to avoid duplicates
-          wrapper.innerHTML = '';
+          if (wrapper) wrapper.innerHTML = '';
 
           products.forEach((product) => {
             const imgSrc = product.images?.[0]?.src;
-            if (!imgSrc) return;
+            if (!imgSrc || !wrapper) return;
 
             const slide = document.createElement('div');
             slide.className = 'swiper-slide';
@@ -135,7 +142,7 @@ function initCarousels() {
         .catch(() => {
           // Optional: handle error state
         });
-    } else {
+    } else if (hasSlides) {
       initSwiper();
     }
   });
