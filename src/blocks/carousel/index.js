@@ -14,6 +14,9 @@ import {
   SelectControl,
   TextControl,
   Button,
+  BaseControl,
+  Flex,
+  FlexBlock,
 } from '@wordpress/components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -85,7 +88,9 @@ registerBlockType('lb-jewelry/carousel', {
     }, [mode]);
 
     const addSlide = () =>
-      setAttributes({ slides: [...slides, { image: '', url: '', title: '' }] });
+      setAttributes({
+        slides: [...slides, { image: '', hoverImage: '', url: '', title: '' }],
+      });
 
     const updateSlide = (index, field, value) => {
       const newSlides = [...slides];
@@ -135,28 +140,60 @@ registerBlockType('lb-jewelry/carousel', {
             <PanelBody title={__('Slides', 'luxurybazaar_jewelry')} initialOpen={true}>
               {slides.map((slide, index) => (
                 <div key={index} className="carousel-slide-control">
-                  <MediaUploadCheck>
-                    <MediaUpload
-                      onSelect={(media) =>
-                        updateSlide(index, 'image', media.url || '')
-                      }
-                      allowedTypes={['image']}
-                      render={({ open }) => (
-                        <Button onClick={open} isSecondary>
-                          {slide.image
-                            ? __('Change Image', 'luxurybazaar_jewelry')
-                            : __('Select Image', 'luxurybazaar_jewelry')}
-                        </Button>
-                      )}
-                    />
-                  </MediaUploadCheck>
-                  {slide.image && (
-                    <img
-                      src={slide.image}
-                      alt=""
-                      style={{ width: '100%', height: 'auto', marginTop: '10px' }}
-                    />
-                  )}
+                  <Flex gap="8">
+                    <FlexBlock>
+                      <BaseControl label={__('Image', 'luxurybazaar_jewelry')}>
+                        <MediaUploadCheck>
+                          <MediaUpload
+                            onSelect={(media) =>
+                              updateSlide(index, 'image', media.url || '')
+                            }
+                            allowedTypes={['image']}
+                            render={({ open }) => (
+                              <Button onClick={open} isSecondary>
+                                {slide.image
+                                  ? __('Change', 'luxurybazaar_jewelry')
+                                  : __('Select', 'luxurybazaar_jewelry')}
+                              </Button>
+                            )}
+                          />
+                        </MediaUploadCheck>
+                        {slide.image && (
+                          <img
+                            src={slide.image}
+                            alt=""
+                            style={{ width: '100%', height: 'auto', marginTop: '10px' }}
+                          />
+                        )}
+                      </BaseControl>
+                    </FlexBlock>
+                    <FlexBlock>
+                      <BaseControl label={__('Hover Image', 'luxurybazaar_jewelry')}>
+                        <MediaUploadCheck>
+                          <MediaUpload
+                            onSelect={(media) =>
+                              updateSlide(index, 'hoverImage', media.url || '')
+                            }
+                            allowedTypes={['image']}
+                            render={({ open }) => (
+                              <Button onClick={open} isSecondary>
+                                {slide.hoverImage
+                                  ? __('Change', 'luxurybazaar_jewelry')
+                                  : __('Select', 'luxurybazaar_jewelry')}
+                              </Button>
+                            )}
+                          />
+                        </MediaUploadCheck>
+                        {slide.hoverImage && (
+                          <img
+                            src={slide.hoverImage}
+                            alt=""
+                            style={{ width: '100%', height: 'auto', marginTop: '10px' }}
+                          />
+                        )}
+                      </BaseControl>
+                    </FlexBlock>
+                  </Flex>
                   <TextControl
                     label={__('Title', 'luxurybazaar_jewelry')}
                     value={slide.title}
@@ -236,31 +273,44 @@ registerBlockType('lb-jewelry/carousel', {
               }}
             >
               {slides.length ? (
-                slides.map((slide, index) => (
-                  <SwiperSlide key={index}>
-                    {slide.url ? (
-                      <a
-                        href={slide.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {slide.image && (
-                          <img
-                            src={slide.image}
-                            alt={slide.title || ''}
-                          />
-                        )}
-                      </a>
-                    ) : (
-                      slide.image && (
-                        <img src={slide.image} alt={slide.title || ''} />
-                      )
-                    )}
-                    {slide.title && (
-                      <div className="product-title">{slide.title}</div>
-                    )}
-                  </SwiperSlide>
-                ))
+                slides.map((slide, index) => {
+                  const imageEl = (
+                    <div className="carousel-image-wrapper">
+                      {slide.image && (
+                        <img
+                          className="main-image"
+                          src={slide.image}
+                          alt={slide.title || ''}
+                        />
+                      )}
+                      {slide.hoverImage && (
+                        <img
+                          className="hover-image"
+                          src={slide.hoverImage}
+                          alt={slide.title || ''}
+                        />
+                      )}
+                    </div>
+                  );
+                  return (
+                    <SwiperSlide key={index}>
+                      {slide.url ? (
+                        <a
+                          href={slide.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {imageEl}
+                        </a>
+                      ) : (
+                        imageEl
+                      )}
+                      {slide.title && (
+                        <div className="product-title">{slide.title}</div>
+                      )}
+                    </SwiperSlide>
+                  );
+                })
               ) : (
                 <SwiperSlide>
                   {__('Add slides in settings', 'luxurybazaar_jewelry')}
@@ -297,24 +347,34 @@ registerBlockType('lb-jewelry/carousel', {
         >
           <div className="swiper-wrapper">
             {mode === 'custom' &&
-              slides.map((slide, index) => (
-                <div className="swiper-slide" key={index}>
-                  {slide.url ? (
-                    <a href={slide.url}>
-                      {slide.image && (
-                        <img src={slide.image} alt={slide.title || ''} />
-                      )}
-                    </a>
-                  ) : (
-                    slide.image && (
-                      <img src={slide.image} alt={slide.title || ''} />
-                    )
-                  )}
-                  {slide.title && (
-                    <div className="product-title">{slide.title}</div>
-                  )}
-                </div>
-              ))}
+              slides.map((slide, index) => {
+                const imageEl = (
+                  <div className="carousel-image-wrapper">
+                    {slide.image && (
+                      <img
+                        className="main-image"
+                        src={slide.image}
+                        alt={slide.title || ''}
+                      />
+                    )}
+                    {slide.hoverImage && (
+                      <img
+                        className="hover-image"
+                        src={slide.hoverImage}
+                        alt={slide.title || ''}
+                      />
+                    )}
+                  </div>
+                );
+                return (
+                  <div className="swiper-slide" key={index}>
+                    {slide.url ? <a href={slide.url}>{imageEl}</a> : imageEl}
+                    {slide.title && (
+                      <div className="product-title">{slide.title}</div>
+                    )}
+                  </div>
+                );
+              })}
           </div>
           <div className="swiper-button-prev"></div>
           <div className="swiper-button-next"></div>
