@@ -41,3 +41,34 @@
 .swiper-button-next {
   color: #fff;
 }
+
+/* Hover image support in editor preview */
+.wpgcb-carousel[data-mode="custom"] .carousel-image-wrapper {
+  position: relative;
+}
+
+.wpgcb-carousel[data-mode="custom"] .carousel-image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.wpgcb-carousel[data-mode="custom"] .carousel-image-wrapper img.hover-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.wpgcb-carousel[data-mode="custom"] .carousel-image-wrapper img.main-image {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.wpgcb-carousel[data-mode="custom"] .swiper-slide:hover .carousel-image-wrapper img.hover-image {
+  opacity: 1;
+}
+
+.wpgcb-carousel[data-mode="custom"] .swiper-slide:hover .carousel-image-wrapper img.main-image {
+  opacity: 0;
+}
