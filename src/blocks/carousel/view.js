@@ -40,7 +40,7 @@ function getBrand(product) {
   return '';
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function initCarousels() {
   document.querySelectorAll('.wpgcb-carousel').forEach((el) => {
     // Avoid initializing the same carousel multiple times
     if (el.classList.contains('swiper-initialized')) {
@@ -126,4 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
       initSwiper();
     }
   });
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCarousels);
+} else {
+  initCarousels();
+}
