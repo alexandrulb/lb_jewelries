@@ -21,7 +21,7 @@
   justify-content: center;
 }
 .bs-slide.is-active .bs-left img {
-  animation: bs-zoom 8s linear forwards;
+  animation: bs-zoom 4s ease-out forwards;
 }
 .bs-left img {
   width: 100%;
