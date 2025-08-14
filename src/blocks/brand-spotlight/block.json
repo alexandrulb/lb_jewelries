@@ -42,7 +42,7 @@
     }
   },
   "editorScript": "file:./index.js",
-  "style": "file:./style.css",
+  "style": "file:./style-index.css",
   "viewScript": "file:./view.js",
-  "editorStyle": "file:./editor.css"
+  "editorStyle": "file:./index.css"
 }
