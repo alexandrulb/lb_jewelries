@@ -1,8 +1,20 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
-import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, ToggleControl } from '@wordpress/components';
+import {
+  useBlockProps,
+  InspectorControls,
+  RichText,
+  MediaUpload,
+  MediaUploadCheck,
+} from '@wordpress/block-editor';
+import {
+  PanelBody,
+  ToggleControl,
+  SelectControl,
+  TextControl,
+  Button,
+} from '@wordpress/components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -49,11 +61,18 @@ function getBrand(product) {
 
 registerBlockType('lb-jewelry/carousel', {
   edit: ({ attributes, setAttributes }) => {
-    const { autoplay = false, loop = false } = attributes;
-    const blockProps = useBlockProps({ className: 'wpgcb-carousel' });
+    const {
+      autoplay = false,
+      loop = false,
+      mode = 'latest',
+      heading = '',
+      slides = [],
+    } = attributes;
+    const blockProps = useBlockProps();
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
+      if (mode !== 'latest') return;
       const url =
         '/wp-json/wc/store/v1/products' +
         '?attributes[0][attribute]=pa_product_type' +
@@ -63,12 +82,29 @@ registerBlockType('lb-jewelry/carousel', {
         .then((res) => res.json())
         .then((data) => (Array.isArray(data) ? setProducts(data) : setProducts([])))
         .catch(() => setProducts([]));
-    }, []);
+    }, [mode]);
+
+    const addSlide = () =>
+      setAttributes({ slides: [...slides, { image: '', url: '', title: '' }] });
+
+    const updateSlide = (index, field, value) => {
+      const newSlides = [...slides];
+      newSlides[index] = { ...newSlides[index], [field]: value };
+      setAttributes({ slides: newSlides });
+    };
+
+    const removeSlide = (index) => {
+      const newSlides = slides.filter((_, i) => i !== index);
+      setAttributes({ slides: newSlides });
+    };
 
     return (
       <>
         <InspectorControls>
-          <PanelBody title={__('Carousel Settings', 'luxurybazaar_jewelry')} initialOpen={true}>
+          <PanelBody
+            title={__('Carousel Settings', 'luxurybazaar_jewelry')}
+            initialOpen={true}
+          >
             <ToggleControl
               label={__('Autoplay', 'luxurybazaar_jewelry')}
               checked={autoplay}
@@ -79,11 +115,113 @@ registerBlockType('lb-jewelry/carousel', {
               checked={loop}
               onChange={(value) => setAttributes({ loop: value })}
             />
+            <SelectControl
+              label={__('Content Source', 'luxurybazaar_jewelry')}
+              value={mode}
+              options={[
+                {
+                  label: __('Latest Jewelry', 'luxurybazaar_jewelry'),
+                  value: 'latest',
+                },
+                {
+                  label: __('Custom Slides', 'luxurybazaar_jewelry'),
+                  value: 'custom',
+                },
+              ]}
+              onChange={(value) => setAttributes({ mode: value })}
+            />
           </PanelBody>
+          {mode === 'custom' && (
+            <PanelBody title={__('Slides', 'luxurybazaar_jewelry')} initialOpen={true}>
+              {slides.map((slide, index) => (
+                <div key={index} className="carousel-slide-control">
+                  <MediaUploadCheck>
+                    <MediaUpload
+                      onSelect={(media) =>
+                        updateSlide(index, 'image', media.url || '')
+                      }
+                      allowedTypes={['image']}
+                      render={({ open }) => (
+                        <Button onClick={open} isSecondary>
+                          {slide.image
+                            ? __('Change Image', 'luxurybazaar_jewelry')
+                            : __('Select Image', 'luxurybazaar_jewelry')}
+                        </Button>
+                      )}
+                    />
+                  </MediaUploadCheck>
+                  {slide.image && (
+                    <img
+                      src={slide.image}
+                      alt=""
+                      style={{ width: '100%', height: 'auto', marginTop: '10px' }}
+                    />
+                  )}
+                  <TextControl
+                    label={__('Title', 'luxurybazaar_jewelry')}
+                    value={slide.title}
+                    onChange={(value) => updateSlide(index, 'title', value)}
+                  />
+                  <TextControl
+                    label={__('Link URL', 'luxurybazaar_jewelry')}
+                    value={slide.url}
+                    onChange={(value) => updateSlide(index, 'url', value)}
+                  />
+                  <Button
+                    isDestructive
+                    onClick={() => removeSlide(index)}
+                    style={{ marginTop: '10px' }}
+                  >
+                    {__('Remove Slide', 'luxurybazaar_jewelry')}
+                  </Button>
+                </div>
+              ))}
+              <Button onClick={addSlide} isSecondary style={{ marginTop: '10px' }}>
+                {__('Add Slide', 'luxurybazaar_jewelry')}
+              </Button>
+            </PanelBody>
+          )}
         </InspectorControls>
 
         <div {...blockProps}>
-          {products.length ? (
+          <RichText
+            tagName="h2"
+            className="wpgcb-carousel-heading"
+            value={heading}
+            onChange={(value) => setAttributes({ heading: value })}
+            placeholder={__('Carousel Heading...', 'luxurybazaar_jewelry')}
+          />
+          {mode === 'latest' ? (
+            products.length ? (
+              <Swiper
+                modules={[Navigation, Pagination, Autoplay]}
+                navigation
+                pagination={{ clickable: true }}
+                autoplay={autoplay ? { delay: 3000 } : false}
+                loop={loop}
+                slidesPerView={1}
+                breakpoints={{
+                  480: { slidesPerView: 2 },
+                  768: { slidesPerView: 3 },
+                  1024: { slidesPerView: 5 },
+                }}
+              >
+                {products.map((product) => {
+                  const brand = getBrand(product);
+                  const img = product.images?.[0]?.src;
+                  return (
+                    <SwiperSlide key={product.id}>
+                      {img && <img src={img} alt={product.name || ''} />}
+                      {brand && <div className="product-brand">{brand}</div>}
+                      <div className="product-title">{product.name}</div>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            ) : (
+              __('Loading products...', 'luxurybazaar_jewelry')
+            )
+          ) : (
             <Swiper
               modules={[Navigation, Pagination, Autoplay]}
               navigation
@@ -97,20 +235,38 @@ registerBlockType('lb-jewelry/carousel', {
                 1024: { slidesPerView: 5 },
               }}
             >
-              {products.map((product) => {
-                const brand = getBrand(product);
-                const img = product.images?.[0]?.src;
-                return (
-                  <SwiperSlide key={product.id}>
-                    {img && <img src={img} alt={product.name || ''} />}
-                    {brand && <div className="product-brand">{brand}</div>}
-                    <div className="product-title">{product.name}</div>
+              {slides.length ? (
+                slides.map((slide, index) => (
+                  <SwiperSlide key={index}>
+                    {slide.url ? (
+                      <a
+                        href={slide.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {slide.image && (
+                          <img
+                            src={slide.image}
+                            alt={slide.title || ''}
+                          />
+                        )}
+                      </a>
+                    ) : (
+                      slide.image && (
+                        <img src={slide.image} alt={slide.title || ''} />
+                      )
+                    )}
+                    {slide.title && (
+                      <div className="product-title">{slide.title}</div>
+                    )}
                   </SwiperSlide>
-                );
-              })}
+                ))
+              ) : (
+                <SwiperSlide>
+                  {__('Add slides in settings', 'luxurybazaar_jewelry')}
+                </SwiperSlide>
+              )}
             </Swiper>
-          ) : (
-            __('Loading products...', 'luxurybazaar_jewelry')
           )}
         </div>
       </>
@@ -118,18 +274,52 @@ registerBlockType('lb-jewelry/carousel', {
   },
 
   save: ({ attributes }) => {
-    const { autoplay = false, loop = false } = attributes;
-    const blockProps = useBlockProps.save({
-      className: 'wpgcb-carousel swiper',
-      'data-autoplay': autoplay,
-      'data-loop': loop,
-    });
+    const {
+      autoplay = false,
+      loop = false,
+      mode = 'latest',
+      heading = '',
+      slides = [],
+    } = attributes;
+
+    const blockProps = useBlockProps.save();
+
     return (
       <div {...blockProps}>
-        <div className="swiper-wrapper"></div>
-        <div className="swiper-button-prev"></div>
-        <div className="swiper-button-next"></div>
-        <div className="swiper-pagination"></div>
+        {heading && (
+          <h2 className="wpgcb-carousel-heading">{heading}</h2>
+        )}
+        <div
+          className="wpgcb-carousel swiper"
+          data-autoplay={autoplay}
+          data-loop={loop}
+          data-mode={mode}
+        >
+          <div className="swiper-wrapper">
+            {mode === 'custom' &&
+              slides.map((slide, index) => (
+                <div className="swiper-slide" key={index}>
+                  {slide.url ? (
+                    <a href={slide.url}>
+                      {slide.image && (
+                        <img src={slide.image} alt={slide.title || ''} />
+                      )}
+                    </a>
+                  ) : (
+                    slide.image && (
+                      <img src={slide.image} alt={slide.title || ''} />
+                    )
+                  )}
+                  {slide.title && (
+                    <div className="product-title">{slide.title}</div>
+                  )}
+                </div>
+              ))}
+          </div>
+          <div className="swiper-button-prev"></div>
+          <div className="swiper-button-next"></div>
+          <div className="swiper-pagination"></div>
+        </div>
       </div>
     );
   },
