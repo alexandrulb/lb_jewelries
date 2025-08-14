@@ -8,7 +8,10 @@
   "textdomain": "luxurybazaar_jewelry",
   "attributes": {
     "autoplay": { "type": "boolean", "default": false },
-    "loop": { "type": "boolean", "default": false }
+    "loop": { "type": "boolean", "default": false },
+    "mode": { "type": "string", "default": "latest" },
+    "heading": { "type": "string", "default": "" },
+    "slides": { "type": "array", "default": [] }
   },
   "supports": {
     "html": false
