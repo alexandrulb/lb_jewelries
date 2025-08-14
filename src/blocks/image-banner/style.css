@@ -1,0 +1,57 @@
+.wpgcb-image-banner {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+}
+.wpgcb-image-banner__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wpgcb-image-banner__box {
+  margin-left: auto;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  padding: 2rem;
+  max-width: 40%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  z-index: 1;
+}
+.wpgcb-image-banner__title {
+  margin: 0 0 1rem;
+  color: #fff;
+  font-family: Cardo;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.wpgcb-image-banner__subtitle {
+  margin: 0 0 1.5rem;
+  color: #fff;
+  font-family: Lato;
+  font-size: 20px;
+  line-height: 1.4;
+}
+.wpgcb-image-banner__button {
+  align-self: center;
+  background: #fff;
+  color: #000;
+  text-decoration: none;
+  padding: .75rem 1.5rem;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+@media (max-width: 768px) {
+  .wpgcb-image-banner__box {
+    max-width: 100%;
+  }
+}

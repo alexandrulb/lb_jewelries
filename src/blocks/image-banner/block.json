@@ -1,0 +1,25 @@
+{
+  "apiVersion": 2,
+  "name": "lb-jewelry/image-banner",
+  "title": "LBJ - Image Banner",
+  "category": "design",
+  "icon": "cover-image",
+  "description": "Full-width image with right overlay content.",
+  "textdomain": "luxurybazaar_jewelry",
+  "attributes": {
+    "title": { "type": "string", "default": "Banner Title" },
+    "subtitle": { "type": "string", "default": "Banner subtitle goes here." },
+    "buttonText": { "type": "string", "default": "Learn More" },
+    "buttonURL": { "type": "string", "default": "" },
+    "imageURL": { "type": "string", "default": "" },
+    "align": { "type": "string", "default": "full" }
+  },
+  "supports": {
+    "html": false,
+    "align": ["full"],
+    "spacing": { "padding": true, "margin": true }
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./style-index.css",
+  "editorStyle": "file:./index.css"
+}

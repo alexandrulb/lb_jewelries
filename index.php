@@ -23,5 +23,6 @@ function lb_jewelry_register_blocks() {
     register_block_type( __DIR__ . '/build/blocks/hero' );
     register_block_type( __DIR__ . '/build/blocks/carousel' );
     register_block_type( __DIR__ . '/build/blocks/brand-spotlight' );
+    register_block_type( __DIR__ . '/build/blocks/image-banner' );
 }
 add_action( 'init', 'lb_jewelry_register_blocks' );
