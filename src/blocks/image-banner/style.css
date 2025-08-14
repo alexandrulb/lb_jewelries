@@ -2,9 +2,6 @@
   position: relative;
   width: 100%;
   min-height: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
 }
 .wpgcb-image-banner__img {
   position: absolute;
@@ -14,7 +11,10 @@
   object-fit: cover;
 }
 .wpgcb-image-banner__box {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 75%;
+  transform: translate(-50%, -50%);
   display: flex;
   width: 484px;
   height: 266px;
