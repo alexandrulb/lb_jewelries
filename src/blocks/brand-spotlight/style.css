@@ -13,14 +13,21 @@
   z-index: 1;
 }
 .bs-grid { display: grid; grid-template-columns: 1fr 1fr; height: 100%; }
-.bs-left { overflow: hidden; height: 100%; }
+.bs-left {
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .bs-slide.is-active .bs-left img {
-  animation: bs-zoom 10s linear forwards;
+  animation: bs-zoom 8s linear forwards;
 }
 .bs-left img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
   transform-origin: center center;
 }
