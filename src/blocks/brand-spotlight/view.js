@@ -21,10 +21,7 @@
       const prevSlide = slides[index];
       const nextSlide = slides[nextIndex];
       if (prevSlide) prevSlide.classList.remove('is-active');
-      if (nextSlide) {
-        nextSlide.classList.add('is-active');
-        root.style.height = nextSlide.offsetHeight + 'px';
-      }
+      if (nextSlide) nextSlide.classList.add('is-active');
       index = nextIndex;
       updateDots(index);
     }
@@ -52,9 +49,6 @@
       s.classList.toggle('is-active', idx === 0);
     });
     index = 0;
-    if (slides[0]) {
-      root.style.height = slides[0].offsetHeight + 'px';
-    }
     updateDots(0);
     start();
   }
