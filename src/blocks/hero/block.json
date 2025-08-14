@@ -9,7 +9,8 @@
   "attributes": {
     "title": { "type": "string", "default": "Your Hero Title" },
     "subtitle": { "type": "string", "default": "A short supporting subtitle goes here." },
-    "coverURL": { "type": "string", "default": "" },
+    "coverURLs": { "type": "array", "default": [] },
+    "coverURL": { "type": "string" },
     "overlayOpacity": { "type": "number", "default": 0.35 },
     "align": { "type": "string", "default": "full" }
   },
@@ -21,6 +22,7 @@
     "dimensions": { "minHeight": false }
   },
   "editorScript": "file:./index.js",
+  "viewScript": "file:./view.js",
   "style": "file:./style-index.css",
   "editorStyle": "file:./index.css"
 }
