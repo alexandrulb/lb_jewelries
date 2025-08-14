@@ -4,7 +4,6 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
   opacity: 0;
   transition: opacity .3s ease;
 }
@@ -12,14 +11,14 @@
   opacity: 1;
   z-index: 1;
 }
-.bs-grid { display: grid; grid-template-columns: 1fr 1fr; height: 100%; }
+.bs-grid { display: grid; grid-template-columns: 1fr 1fr; }
 .bs-left { overflow: hidden; }
 .bs-slide.is-active .bs-left img {
   animation: bs-zoom 20s linear forwards;
 }
 .bs-left img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
   display: block;
   transform-origin: center center;
