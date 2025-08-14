@@ -5,6 +5,14 @@
   margin: 0 auto;
 }
 
+.wpgcb-carousel-heading {
+  text-align: center;
+  font-family: 'Roboto Condensed';
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
 .swiper-slide img {
   display: block;
   width: 100%;
