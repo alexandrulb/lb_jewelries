@@ -10,6 +10,7 @@
     "title": { "type": "string", "default": "Your Hero Title" },
     "subtitle": { "type": "string", "default": "A short supporting subtitle goes here." },
     "coverURLs": { "type": "array", "default": [] },
+    "coverURL": { "type": "string" },
     "overlayOpacity": { "type": "number", "default": 0.35 },
     "align": { "type": "string", "default": "full" }
   },

@@ -2,6 +2,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, MediaUpload, RichText, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, RangeControl, Button } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectFade, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -11,8 +12,22 @@ import './editor.css';
 
 registerBlockType('lb-jewelry/hero', {
   edit: ({ attributes, setAttributes }) => {
-    const { title, subtitle, coverURLs = [], overlayOpacity } = attributes;
+    const {
+      title,
+      subtitle,
+      coverURLs = [],
+      coverURL,
+      overlayOpacity,
+    } = attributes;
     const blockProps = useBlockProps({ className: 'wpgcb-hero' });
+
+    useEffect(() => {
+      if (!coverURLs.length && coverURL) {
+        setAttributes({ coverURLs: [coverURL], coverURL: undefined });
+      }
+    }, [coverURL, coverURLs, setAttributes]);
+
+    const images = coverURLs.length ? coverURLs : coverURL ? [coverURL] : [];
 
     return (
       <>
@@ -20,7 +35,10 @@ registerBlockType('lb-jewelry/hero', {
           <PanelBody title={__('Hero Images', 'luxurybazaar_jewelry')} initialOpen={true}>
             <MediaUpload
               onSelect={(media) =>
-                setAttributes({ coverURLs: media.map((m) => m.url) })
+                setAttributes({
+                  coverURLs: media.map((m) => m.url),
+                  coverURL: undefined,
+                })
               }
               allowedTypes={['image']}
               multiple
@@ -44,7 +62,7 @@ registerBlockType('lb-jewelry/hero', {
           </PanelBody>
         </InspectorControls>
         <div {...blockProps}>
-          {coverURLs.length > 0 && (
+          {images.length > 0 && (
             <Swiper
               modules={[EffectFade, Autoplay]}
               effect="fade"
@@ -54,7 +72,7 @@ registerBlockType('lb-jewelry/hero', {
               loop
               className="wpgcb-hero__slider"
             >
-              {coverURLs.map((url, index) => (
+              {images.map((url, index) => (
                 <SwiperSlide key={index}>
                   <img
                     className={`wpgcb-hero__cover${index === 0 ? ' wpgcb-hero__cover--first' : ''}`}
