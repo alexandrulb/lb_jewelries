@@ -14,6 +14,9 @@ import {
   SelectControl,
   TextControl,
   Button,
+  BaseControl,
+  Flex,
+  FlexBlock,
 } from '@wordpress/components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -137,50 +140,60 @@ registerBlockType('lb-jewelry/carousel', {
             <PanelBody title={__('Slides', 'luxurybazaar_jewelry')} initialOpen={true}>
               {slides.map((slide, index) => (
                 <div key={index} className="carousel-slide-control">
-                  <MediaUploadCheck>
-                    <MediaUpload
-                      onSelect={(media) =>
-                        updateSlide(index, 'image', media.url || '')
-                      }
-                      allowedTypes={['image']}
-                      render={({ open }) => (
-                        <Button onClick={open} isSecondary>
-                          {slide.image
-                            ? __('Change Image', 'luxurybazaar_jewelry')
-                            : __('Select Image', 'luxurybazaar_jewelry')}
-                        </Button>
-                      )}
-                    />
-                  </MediaUploadCheck>
-                  {slide.image && (
-                    <img
-                      src={slide.image}
-                      alt=""
-                      style={{ width: '100%', height: 'auto', marginTop: '10px' }}
-                    />
-                  )}
-                  <MediaUploadCheck>
-                    <MediaUpload
-                      onSelect={(media) =>
-                        updateSlide(index, 'hoverImage', media.url || '')
-                      }
-                      allowedTypes={['image']}
-                      render={({ open }) => (
-                        <Button onClick={open} isSecondary>
-                          {slide.hoverImage
-                            ? __('Change Hover Image', 'luxurybazaar_jewelry')
-                            : __('Select Hover Image', 'luxurybazaar_jewelry')}
-                        </Button>
-                      )}
-                    />
-                  </MediaUploadCheck>
-                  {slide.hoverImage && (
-                    <img
-                      src={slide.hoverImage}
-                      alt=""
-                      style={{ width: '100%', height: 'auto', marginTop: '10px' }}
-                    />
-                  )}
+                  <Flex gap="8">
+                    <FlexBlock>
+                      <BaseControl label={__('Image', 'luxurybazaar_jewelry')}>
+                        <MediaUploadCheck>
+                          <MediaUpload
+                            onSelect={(media) =>
+                              updateSlide(index, 'image', media.url || '')
+                            }
+                            allowedTypes={['image']}
+                            render={({ open }) => (
+                              <Button onClick={open} isSecondary>
+                                {slide.image
+                                  ? __('Change', 'luxurybazaar_jewelry')
+                                  : __('Select', 'luxurybazaar_jewelry')}
+                              </Button>
+                            )}
+                          />
+                        </MediaUploadCheck>
+                        {slide.image && (
+                          <img
+                            src={slide.image}
+                            alt=""
+                            style={{ width: '100%', height: 'auto', marginTop: '10px' }}
+                          />
+                        )}
+                      </BaseControl>
+                    </FlexBlock>
+                    <FlexBlock>
+                      <BaseControl label={__('Hover Image', 'luxurybazaar_jewelry')}>
+                        <MediaUploadCheck>
+                          <MediaUpload
+                            onSelect={(media) =>
+                              updateSlide(index, 'hoverImage', media.url || '')
+                            }
+                            allowedTypes={['image']}
+                            render={({ open }) => (
+                              <Button onClick={open} isSecondary>
+                                {slide.hoverImage
+                                  ? __('Change', 'luxurybazaar_jewelry')
+                                  : __('Select', 'luxurybazaar_jewelry')}
+                              </Button>
+                            )}
+                          />
+                        </MediaUploadCheck>
+                        {slide.hoverImage && (
+                          <img
+                            src={slide.hoverImage}
+                            alt=""
+                            style={{ width: '100%', height: 'auto', marginTop: '10px' }}
+                          />
+                        )}
+                      </BaseControl>
+                    </FlexBlock>
+                  </Flex>
                   <TextControl
                     label={__('Title', 'luxurybazaar_jewelry')}
                     value={slide.title}
