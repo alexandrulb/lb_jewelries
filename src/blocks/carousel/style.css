@@ -1,42 +1,127 @@
-.wpgcb-carousel {
-  position: relative;
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-}
-
-.wpgcb-carousel-heading {
-  text-align: center;
-  font-family: 'Roboto Condensed';
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.product-brand {
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-.product-title {
-  text-align: center;
-  font-family: 'Roboto Condensed';
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.swiper-button-prev,
-.swiper-button-next {
-  color: #fff;
-}
+/* ===============================
+   Base Container
+   =============================== */
+   .wpgcb-carousel {
+    position: relative;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+  
+  /* ===============================
+     Carousel Heading (all modes)
+     EXACT values, no CSS variables
+     =============================== */
+  .wpgcb-carousel-heading {
+    color: #000;
+    text-align: center;
+    font-family: Cardo;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 48px; /* 100% */
+    margin-bottom: 20px; /* keep your existing spacing */
+  }
+  
+  /* ===============================
+     Generic (kept from your file)
+     =============================== */
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  
+  .product-brand {
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  
+  /* You still may use a generic product-title for non-custom carousels */
+  .product-title {
+    text-align: center;
+    font-family: 'Roboto Condensed';
+    font-size: 16px;
+    font-weight: 400;
+  }
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: #fff;
+  }
+  
+  /* ===============================
+     CUSTOM mode slides
+     - Card layout
+     - No wrapper gap (prevents last-item cut-off)
+     - Spacing handled by Swiper (JS) OR container padding
+     =============================== */
+  .wpgcb-carousel[data-mode="custom"] .swiper-wrapper {
+    gap: 0 !important; /* critical: avoid computed width mismatch that clips last slide */
+  }
+  
+  .wpgcb-carousel[data-mode="custom"] .swiper {
+    /* padding ensures first/last slides aren't tight to edges and
+       gives room if JS spaceBetween is used */
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  
+  .wpgcb-carousel[data-mode="custom"] .swiper-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    border-radius: 20px;
+  
+    /* "Smaller" feel without breaking Swiper calc */
+    box-sizing: border-box;
+    padding: 8px;
+  
+    /* Visual card look */
+    background-color: #fff;
+  }
+  
+  /* Image in custom slides */
+  .wpgcb-carousel[data-mode="custom"] .swiper-slide img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+  }
+  
+  /* ===============================
+     Text under custom items (EXACT values)
+     =============================== */
+  .wpgcb-carousel[data-mode="custom"] .product-title {
+    color: #000;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28.8px; /* 120% */
+    margin: 0; /* normalize */
+  }
+  
+  /* (Optional) If you also want brand text under custom items to match: */
+  /*
+  .wpgcb-carousel[data-mode="custom"] .product-brand {
+    color: #000;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28.8px;
+    text-transform: none;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  */
+  
