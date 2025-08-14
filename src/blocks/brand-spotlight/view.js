@@ -16,10 +16,13 @@
       });
     }
     function show(i) {
-      index = (i + slides.length) % slides.length;
-      slides.forEach((s, idx) => {
-        s.style.display = idx === index ? 'block' : 'none';
-      });
+      const nextIndex = (i + slides.length) % slides.length;
+      if (nextIndex === index) return;
+      const prevSlide = slides[index];
+      const nextSlide = slides[nextIndex];
+      if (prevSlide) prevSlide.classList.remove('is-active');
+      if (nextSlide) nextSlide.classList.add('is-active');
+      index = nextIndex;
       updateDots(index);
     }
     function next() { show(index + 1); }
@@ -42,8 +45,11 @@
     root.addEventListener('mouseleave', start);
 
     // init
-    slides.forEach((s, idx) => s.style.display = idx === 0 ? 'block' : 'none');
-    show(0);
+    slides.forEach((s, idx) => {
+      s.classList.toggle('is-active', idx === 0);
+    });
+    index = 0;
+    updateDots(0);
     start();
   }
   document.addEventListener('DOMContentLoaded', () => {
