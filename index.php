@@ -22,5 +22,6 @@ define( 'LBJ_URL', plugin_dir_url( __FILE__ ) );
 function lb_jewelry_register_blocks() {
     register_block_type( __DIR__ . '/build/blocks/hero' );
     register_block_type( __DIR__ . '/build/blocks/carousel' );
+    register_block_type( __DIR__ . '/build/blocks/brand-spotlight' );
 }
 add_action( 'init', 'lb_jewelry_register_blocks' );

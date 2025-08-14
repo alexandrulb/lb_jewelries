@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "lbj/brand-spotlight",
+  "version": "1.0.0",
+  "title": "LBJ Brand Spotlight Carousel",
+  "category": "widgets",
+  "icon": "slides",
+  "description": "Full-width, split-layout brand hero with image, copy and CTA buttons. Supports multiple slides.",
+  "keywords": [
+    "brand",
+    "hero",
+    "carousel",
+    "slider"
+  ],
+  "attributes": {
+    "slides": {
+      "type": "array",
+      "default": []
+    },
+    "autoplay": {
+      "type": "boolean",
+      "default": true
+    },
+    "autoplayDelay": {
+      "type": "number",
+      "default": 5000
+    },
+    "showDots": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "editorScript": "file:./index.js",
+  "style": "file:./style.css",
+  "viewScript": "file:./view.js",
+  "editorStyle": "file:./editor.css"
+}
