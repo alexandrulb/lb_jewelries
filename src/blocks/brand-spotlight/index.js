@@ -29,36 +29,40 @@ const SlideEditor = ({ slide, onChange, onRemove }) => {
         onChange={(val) => onChange({ ...slide, description: val })}
         className="bs-desc"
       />
-      {slide.showButtons !== false && (
+      {(slide.showPrimary !== false || slide.showSecondary !== false) && (
         <div className="bs-buttons">
-          <div>
-            <RichText
-              tagName="span"
-              placeholder={__('Primary CTA', 'brand-spotlight')}
-              value={slide.primaryText}
-              onChange={(val) => onChange({ ...slide, primaryText: val })}
-              className="bs-btn-label"
-            />
-            <URLInputButton
-              url={slide.primaryUrl}
-              onChange={(url) => onChange({ ...slide, primaryUrl: url })}
-              label={__('Link', 'brand-spotlight')}
-            />
-          </div>
-          <div>
-            <RichText
-              tagName="span"
-              placeholder={__('Secondary CTA', 'brand-spotlight')}
-              value={slide.secondaryText}
-              onChange={(val) => onChange({ ...slide, secondaryText: val })}
-              className="bs-btn-label"
-            />
-            <URLInputButton
-              url={slide.secondaryUrl}
-              onChange={(url) => onChange({ ...slide, secondaryUrl: url })}
-              label={__('Link', 'brand-spotlight')}
-            />
-          </div>
+          {slide.showPrimary !== false && (
+            <div>
+              <RichText
+                tagName="span"
+                placeholder={__('Primary CTA', 'brand-spotlight')}
+                value={slide.primaryText}
+                onChange={(val) => onChange({ ...slide, primaryText: val })}
+                className="bs-btn-label"
+              />
+              <URLInputButton
+                url={slide.primaryUrl}
+                onChange={(url) => onChange({ ...slide, primaryUrl: url })}
+                label={__('Link', 'brand-spotlight')}
+              />
+            </div>
+          )}
+          {slide.showSecondary !== false && (
+            <div>
+              <RichText
+                tagName="span"
+                placeholder={__('Secondary CTA', 'brand-spotlight')}
+                value={slide.secondaryText}
+                onChange={(val) => onChange({ ...slide, secondaryText: val })}
+                className="bs-btn-label"
+              />
+              <URLInputButton
+                url={slide.secondaryUrl}
+                onChange={(url) => onChange({ ...slide, secondaryUrl: url })}
+                label={__('Link', 'brand-spotlight')}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -107,9 +111,14 @@ const SlideEditor = ({ slide, onChange, onRemove }) => {
         onChange={(val) => onChange({ ...slide, imageRight: val })}
       />
       <ToggleControl
-        label={__('Display buttons', 'brand-spotlight')}
-        checked={slide.showButtons !== false}
-        onChange={(val) => onChange({ ...slide, showButtons: val })}
+        label={__('Show primary button', 'brand-spotlight')}
+        checked={slide.showPrimary !== false}
+        onChange={(val) => onChange({ ...slide, showPrimary: val })}
+      />
+      <ToggleControl
+        label={__('Show secondary button', 'brand-spotlight')}
+        checked={slide.showSecondary !== false}
+        onChange={(val) => onChange({ ...slide, showSecondary: val })}
       />
       <div className="bs-slide-actions">
         <Button variant="secondary" onClick={onRemove}>{__('Remove slide', 'brand-spotlight')}</Button>
@@ -126,7 +135,7 @@ const Edit = (props) => {
     setAttributes({
       slides: [
         ...slides,
-        { imageUrl: '', imageId: 0, eyebrow: 'SHOP BY BRAND', brand: 'Brand', description: '', primaryText: 'Shop now', primaryUrl: '#', secondaryText: 'See all', secondaryUrl: '#', imageRight: false, showButtons: true }
+        { imageUrl: '', imageId: 0, eyebrow: 'SHOP BY BRAND', brand: 'Brand', description: '', primaryText: 'Shop now', primaryUrl: '#', secondaryText: 'See all', secondaryUrl: '#', imageRight: false, showPrimary: true, showSecondary: true }
       ]
     });
   };
@@ -199,19 +208,21 @@ const save = ({ attributes }) => {
       data-dots={showDots ? 'true' : 'false'}
     >
       {slides.map((slide, index) => {
+        const hasPrimary = slide.showPrimary !== false && slide.primaryText && slide.primaryUrl;
+        const hasSecondary = slide.showSecondary !== false && slide.secondaryText && slide.secondaryUrl;
         const RightInner = (
           <div className="bs-inner">
             {slide.eyebrow && <div className="bs-eyebrow">{slide.eyebrow}</div>}
             {slide.brand && <h2 className="bs-brand">{slide.brand}</h2>}
             {slide.description && <p className="bs-desc">{slide.description}</p>}
-            {slide.showButtons !== false && (
+            {(hasPrimary || hasSecondary) && (
               <div className="bs-buttons">
-                {slide.primaryText && slide.primaryUrl && (
+                {hasPrimary && (
                   <a className="bs-btn bs-btn--primary" href={slide.primaryUrl}>
                     <span>{slide.primaryText}</span>
                   </a>
                 )}
-                {slide.secondaryText && slide.secondaryUrl && (
+                {hasSecondary && (
                   <a className="bs-btn bs-btn--secondary" href={slide.secondaryUrl}>
                     <span>{slide.secondaryText}</span>
                   </a>
