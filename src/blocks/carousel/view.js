@@ -42,9 +42,15 @@ function getBrand(product) {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.wpgcb-carousel').forEach((el) => {
+    // Avoid initializing the same carousel multiple times
+    if (el.classList.contains('swiper-initialized')) {
+      return;
+    }
+
     const autoplay = el.dataset.autoplay === 'true';
     const loop = el.dataset.loop === 'true';
     const mode = el.dataset.mode || 'latest';
+    const wrapper = el.querySelector('.swiper-wrapper');
 
     const initSwiper = () => {
       new Swiper(el, {
@@ -68,7 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     };
 
-    if (mode === 'latest') {
+    // Fetch latest products only if we are in "latest" mode and no slides exist yet
+    if (mode === 'latest' && wrapper && wrapper.children.length === 0) {
       const url =
         '/wp-json/wc/store/v1/products' +
         '?attributes[0][attribute]=pa_product_type' +
@@ -79,8 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then((res) => res.json())
         .then((products) => {
           if (!Array.isArray(products)) return;
-          const wrapper = el.querySelector('.swiper-wrapper');
-          if (!wrapper) return;
+          // Clear any existing slides to avoid duplicates
+          wrapper.innerHTML = '';
 
           products.forEach((product) => {
             const imgSrc = product.images?.[0]?.src;
