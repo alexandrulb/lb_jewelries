@@ -7,3 +7,7 @@
 .wpgcb-hero__content { position:relative; z-index:3; max-width:900px; }
 .wpgcb-hero__title { margin:0 0 1rem; color:#fff; font-family:Cardo; font-size:80px; font-style:normal; font-weight:700; line-height:88px; }
 .wpgcb-hero__subtitle { margin:0; color:#fff; font-family:Lato; font-size:24px; font-style:normal; font-weight:700; line-height:26.4px; }
+.wpgcb-hero__slider { position:absolute; inset:0; }
+.wpgcb-hero .swiper-slide { position:relative; width:100%; height:100%; }
+.wpgcb-hero__cover--first { transform:scale(1.1); animation:wpgcb-hero-zoom .5s ease-out forwards; }
+@keyframes wpgcb-hero-zoom { to { transform:scale(1); } }
