@@ -1,81 +1,116 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
 import { MediaUpload, RichText, InspectorControls, URLInputButton } from '@wordpress/block-editor';
 import { Button, PanelBody, ToggleControl, RangeControl } from '@wordpress/components';
 import './editor.css';
 import './style.css';
 
 const SlideEditor = ({ slide, onChange, onRemove }) => {
+  const RightContent = () => (
+    <div className="bs-right">
+      <RichText
+        tagName="div"
+        placeholder={__('Eyebrow (e.g., SHOP BY BRAND)', 'brand-spotlight')}
+        value={slide.eyebrow}
+        onChange={(val) => onChange({ ...slide, eyebrow: val })}
+        className="bs-eyebrow"
+      />
+      <RichText
+        tagName="h2"
+        placeholder={__('Brand name', 'brand-spotlight')}
+        value={slide.brand}
+        onChange={(val) => onChange({ ...slide, brand: val })}
+        className="bs-brand"
+      />
+      <RichText
+        tagName="p"
+        placeholder={__('Description', 'brand-spotlight')}
+        value={slide.description}
+        onChange={(val) => onChange({ ...slide, description: val })}
+        className="bs-desc"
+      />
+      {slide.showButtons !== false && (
+        <div className="bs-buttons">
+          <div>
+            <RichText
+              tagName="span"
+              placeholder={__('Primary CTA', 'brand-spotlight')}
+              value={slide.primaryText}
+              onChange={(val) => onChange({ ...slide, primaryText: val })}
+              className="bs-btn-label"
+            />
+            <URLInputButton
+              url={slide.primaryUrl}
+              onChange={(url) => onChange({ ...slide, primaryUrl: url })}
+              label={__('Link', 'brand-spotlight')}
+            />
+          </div>
+          <div>
+            <RichText
+              tagName="span"
+              placeholder={__('Secondary CTA', 'brand-spotlight')}
+              value={slide.secondaryText}
+              onChange={(val) => onChange({ ...slide, secondaryText: val })}
+              className="bs-btn-label"
+            />
+            <URLInputButton
+              url={slide.secondaryUrl}
+              onChange={(url) => onChange({ ...slide, secondaryUrl: url })}
+              label={__('Link', 'brand-spotlight')}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="bs-slide-editor">
       <div className="bs-slide-grid">
-        <div className="bs-left img">
-          <MediaUpload
-            onSelect={(media) => onChange({ ...slide, imageUrl: media.url, imageId: media.id })}
-            allowedTypes={['image']}
-            render={({ open }) => (
-              <Button variant="secondary" onClick={open}>
-                {slide.imageUrl ? __('Change Image', 'brand-spotlight') : __('Choose Image', 'brand-spotlight')}
-              </Button>
-            )}
-          />
-          {slide.imageUrl && <img src={slide.imageUrl} alt="" />}
-        </div>
-        <div className="bs-right">
-          <RichText
-            tagName="div"
-            placeholder={__('Eyebrow (e.g., SHOP BY BRAND)', 'brand-spotlight')}
-            value={slide.eyebrow}
-            onChange={(val) => onChange({ ...slide, eyebrow: val })}
-            className="bs-eyebrow"
-          />
-          <RichText
-            tagName="h2"
-            placeholder={__('Brand name', 'brand-spotlight')}
-            value={slide.brand}
-            onChange={(val) => onChange({ ...slide, brand: val })}
-            className="bs-brand"
-          />
-          <RichText
-            tagName="p"
-            placeholder={__('Description', 'brand-spotlight')}
-            value={slide.description}
-            onChange={(val) => onChange({ ...slide, description: val })}
-            className="bs-desc"
-          />
-          <div className="bs-buttons">
-            <div>
-              <RichText
-                tagName="span"
-                placeholder={__('Primary CTA', 'brand-spotlight')}
-                value={slide.primaryText}
-                onChange={(val) => onChange({ ...slide, primaryText: val })}
-                className="bs-btn-label"
+        {slide.imageRight ? (
+          <>
+            <RightContent />
+            <div className="bs-left img">
+              <MediaUpload
+                onSelect={(media) => onChange({ ...slide, imageUrl: media.url, imageId: media.id })}
+                allowedTypes={['image']}
+                render={({ open }) => (
+                  <Button variant="secondary" onClick={open}>
+                    {slide.imageUrl ? __('Change Image', 'brand-spotlight') : __('Choose Image', 'brand-spotlight')}
+                  </Button>
+                )}
               />
-              <URLInputButton
-                url={slide.primaryUrl}
-                onChange={(url) => onChange({ ...slide, primaryUrl: url })}
-                label={__('Link', 'brand-spotlight')}
-              />
+              {slide.imageUrl && <img src={slide.imageUrl} alt="" />}
             </div>
-            <div>
-              <RichText
-                tagName="span"
-                placeholder={__('Secondary CTA', 'brand-spotlight')}
-                value={slide.secondaryText}
-                onChange={(val) => onChange({ ...slide, secondaryText: val })}
-                className="bs-btn-label"
+          </>
+        ) : (
+          <>
+            <div className="bs-left img">
+              <MediaUpload
+                onSelect={(media) => onChange({ ...slide, imageUrl: media.url, imageId: media.id })}
+                allowedTypes={['image']}
+                render={({ open }) => (
+                  <Button variant="secondary" onClick={open}>
+                    {slide.imageUrl ? __('Change Image', 'brand-spotlight') : __('Choose Image', 'brand-spotlight')}
+                  </Button>
+                )}
               />
-              <URLInputButton
-                url={slide.secondaryUrl}
-                onChange={(url) => onChange({ ...slide, secondaryUrl: url })}
-                label={__('Link', 'brand-spotlight')}
-              />
+              {slide.imageUrl && <img src={slide.imageUrl} alt="" />}
             </div>
-          </div>
-        </div>
+            <RightContent />
+          </>
+        )}
       </div>
+      <ToggleControl
+        label={__('Image on right', 'brand-spotlight')}
+        checked={!!slide.imageRight}
+        onChange={(val) => onChange({ ...slide, imageRight: val })}
+      />
+      <ToggleControl
+        label={__('Display buttons', 'brand-spotlight')}
+        checked={slide.showButtons !== false}
+        onChange={(val) => onChange({ ...slide, showButtons: val })}
+      />
       <div className="bs-slide-actions">
         <Button variant="secondary" onClick={onRemove}>{__('Remove slide', 'brand-spotlight')}</Button>
       </div>
@@ -91,7 +126,7 @@ const Edit = (props) => {
     setAttributes({
       slides: [
         ...slides,
-        { imageUrl: '', imageId: 0, eyebrow: 'SHOP BY BRAND', brand: 'Brand', description: '', primaryText: 'Shop now', primaryUrl: '#', secondaryText: 'See all', secondaryUrl: '#' }
+        { imageUrl: '', imageId: 0, eyebrow: 'SHOP BY BRAND', brand: 'Brand', description: '', primaryText: 'Shop now', primaryUrl: '#', secondaryText: 'See all', secondaryUrl: '#', imageRight: false, showButtons: true }
       ]
     });
   };
@@ -163,41 +198,57 @@ const save = ({ attributes }) => {
       data-delay={String(autoplayDelay || 5000)}
       data-dots={showDots ? 'true' : 'false'}
     >
-      {slides.map((slide, index) => (
-        <section className="bs-slide" key={index} aria-roledescription="slide">
-          <div className="bs-grid">
-            <div className="bs-left">
-              {slide.imageUrl && <img src={slide.imageUrl} alt="" />}
-            </div>
-            <div className="bs-right">
-              <div className="bs-inner">
-                {slide.eyebrow && <div className="bs-eyebrow">{slide.eyebrow}</div>}
-                {slide.brand && <h2 className="bs-brand">{slide.brand}</h2>}
-                {slide.description && <p className="bs-desc">{slide.description}</p>}
-                <div className="bs-buttons">
-                  {slide.primaryText && slide.primaryUrl && (
-                    <a className="bs-btn bs-btn--primary" href={slide.primaryUrl}>
-                      <span>{slide.primaryText}</span>
-                    </a>
-                  )}
-                  {slide.secondaryText && slide.secondaryUrl && (
-                    <a className="bs-btn bs-btn--secondary" href={slide.secondaryUrl}>
-                      <span>{slide.secondaryText}</span>
-                    </a>
-                  )}
-                </div>
-                {showDots && (
-                  <div className="bs-dots" role="tablist" aria-label="Carousel Pagination">
-                    {slides.map((_, i) => (
-                      <button key={i} className="bs-dot" data-index={i} role="tab" aria-selected={i===0?'true':'false'} aria-controls={`bs-slide-${i}`} />
-                    ))}
-                  </div>
+      {slides.map((slide, index) => {
+        const RightInner = (
+          <div className="bs-inner">
+            {slide.eyebrow && <div className="bs-eyebrow">{slide.eyebrow}</div>}
+            {slide.brand && <h2 className="bs-brand">{slide.brand}</h2>}
+            {slide.description && <p className="bs-desc">{slide.description}</p>}
+            {slide.showButtons !== false && (
+              <div className="bs-buttons">
+                {slide.primaryText && slide.primaryUrl && (
+                  <a className="bs-btn bs-btn--primary" href={slide.primaryUrl}>
+                    <span>{slide.primaryText}</span>
+                  </a>
+                )}
+                {slide.secondaryText && slide.secondaryUrl && (
+                  <a className="bs-btn bs-btn--secondary" href={slide.secondaryUrl}>
+                    <span>{slide.secondaryText}</span>
+                  </a>
                 )}
               </div>
-            </div>
+            )}
+            {showDots && (
+              <div className="bs-dots" role="tablist" aria-label="Carousel Pagination">
+                {slides.map((_, i) => (
+                  <button key={i} className="bs-dot" data-index={i} role="tab" aria-selected={i===0?'true':'false'} aria-controls={`bs-slide-${i}`} />
+                ))}
+              </div>
+            )}
           </div>
-        </section>
-      ))}
+        );
+        return (
+          <section className="bs-slide" key={index} aria-roledescription="slide">
+            <div className="bs-grid">
+              {slide.imageRight ? (
+                <>
+                  <div className="bs-right">{RightInner}</div>
+                  <div className="bs-left">
+                    {slide.imageUrl && <img src={slide.imageUrl} alt="" />}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="bs-left">
+                    {slide.imageUrl && <img src={slide.imageUrl} alt="" />}
+                  </div>
+                  <div className="bs-right">{RightInner}</div>
+                </>
+              )}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 };
