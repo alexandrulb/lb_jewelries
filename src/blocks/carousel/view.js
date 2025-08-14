@@ -41,9 +41,9 @@ function getBrand(product) {
 }
 
 function initCarousels() {
-  document.querySelectorAll('.wpgcb-carousel').forEach((el) => {
+  document.querySelectorAll('.wpgcb-carousel').forEach((el, index) => {
     // Avoid initializing the same carousel multiple times
-    if (el.classList.contains('swiper-initialized')) {
+    if (el.dataset.initialized === 'true') {
       return;
     }
 
@@ -51,6 +51,17 @@ function initCarousels() {
     const loop = el.dataset.loop === 'true';
     const mode = el.dataset.mode || 'latest';
     const wrapper = el.querySelector('.swiper-wrapper');
+
+    // Generate unique selectors for navigation/pagination to prevent cross-instance collisions
+    const nextClass = `swiper-button-next-${index}`;
+    const prevClass = `swiper-button-prev-${index}`;
+    const pagClass = `swiper-pagination-${index}`;
+    const nextEl = el.querySelector('.swiper-button-next');
+    const prevEl = el.querySelector('.swiper-button-prev');
+    const pagEl = el.querySelector('.swiper-pagination');
+    if (nextEl) nextEl.classList.add(nextClass);
+    if (prevEl) prevEl.classList.add(prevClass);
+    if (pagEl) pagEl.classList.add(pagClass);
 
     const initSwiper = () => {
       new Swiper(el, {
@@ -62,16 +73,18 @@ function initCarousels() {
           1024: { slidesPerView: 5 },
         },
         navigation: {
-          nextEl: el.querySelector('.swiper-button-next'),
-          prevEl: el.querySelector('.swiper-button-prev'),
+          nextEl: `.${nextClass}`,
+          prevEl: `.${prevClass}`,
         },
         pagination: {
-          el: el.querySelector('.swiper-pagination'),
+          el: `.${pagClass}`,
           clickable: true,
         },
         autoplay: autoplay ? { delay: 3000 } : false,
         loop,
       });
+      // mark this carousel as initialized
+      el.dataset.initialized = 'true';
     };
 
     // Fetch latest products only if we are in "latest" mode and no slides exist yet
