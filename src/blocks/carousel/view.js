@@ -71,27 +71,25 @@ function initCarousels() {
     // inside initCarousels(), after reading `mode`:
     const spaceBetween = mode === 'custom' ? 16 : 0;
 
-    // in the Swiper options:
-    new Swiper(swiperEl, {
-      modules: [Navigation, Pagination, Autoplay],
-      slidesPerView: 1,
-      breakpoints: {
-        480: { slidesPerView: 2 },
-        768: { slidesPerView: 3 },
-        1024: { slidesPerView: 5 },
-      },
-      spaceBetween, // ✅ add this line
-      navigation: (nextEl && prevEl) ? {
-        nextEl: `.${nextClass}`,
-        prevEl: `.${prevClass}`,
-      } : undefined,
-      pagination: pagEl ? {
-        el: `.${pagClass}`,
-        clickable: true,
-      } : undefined,
-      autoplay: autoplay ? { delay: 3000 } : false,
-      loop,
-    });
+    const initSwiper = () =>
+      new Swiper(swiperEl, {
+        modules: [Navigation, Pagination, Autoplay],
+        slidesPerView: 1,
+        breakpoints: {
+          480: { slidesPerView: 2 },
+          768: { slidesPerView: 3 },
+          1024: { slidesPerView: 5 },
+        },
+        spaceBetween, // ✅ add this line
+        navigation: (nextEl && prevEl)
+          ? { nextEl: `.${nextClass}`, prevEl: `.${prevClass}` }
+          : undefined,
+        pagination: pagEl
+          ? { el: `.${pagClass}`, clickable: true }
+          : undefined,
+        autoplay: autoplay ? { delay: 3000 } : false,
+        loop,
+      });
 
     // Latest mode loads products dynamically
     if (mode === 'latest' && !hasSlides) {
