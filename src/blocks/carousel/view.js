@@ -35,17 +35,33 @@ function getBrand(product) {
   return '';
 }
 
+// Send debug logs to server
+function log(message) {
+  try {
+    fetch('/wp-json/lb-jewelry/v1/log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message }),
+    });
+  } catch (e) {
+    // fail silently
+  }
+}
+
 function initCarousels() {
   document.querySelectorAll('.wpgcb-carousel').forEach((el, index) => {
     if (el.dataset.initialized === 'true') return;
+    log(`Carousel ${index}: start initialization`);
 
     const autoplay = el.dataset.autoplay === 'true';
     const loop = el.dataset.loop === 'true';
     const mode = el.dataset.mode || 'latest';
+    log(`Carousel ${index}: mode=${mode}`);
 
     const swiperEl = el.querySelector('.swiper');
     const wrapper  = el.querySelector('.swiper-wrapper');
     const hasSlides = wrapper && wrapper.children.length > 0;
+    log(`Carousel ${index}: hasSlides=${hasSlides}`);
 
     // Guards to prevent bad init
     if (!(swiperEl instanceof Element) || !(wrapper instanceof Element)) {
@@ -98,11 +114,31 @@ function initCarousels() {
         '?attributes[0][attribute]=pa_product_type' +
         '&attributes[0][slug]=jewelry' +
         '&per_page=10';
-
+      log(`Carousel ${index}: fetching ${url}`);
       fetch(url)
-        .then((res) => res.json())
-        .then((products) => {
-          if (!Array.isArray(products) || !(wrapper instanceof Element)) return;
+        .then((res) => {
+          log(
+            `Carousel ${index}: response status ${res.status} content-type ${res.headers.get(
+              'content-type'
+            )}`
+          );
+          return res.text();
+        })
+        .then((text) => {
+          let products;
+          try {
+            products = JSON.parse(text);
+          } catch (err) {
+            log(
+              `Carousel ${index}: JSON parse error ${err}; body: ${text.slice(0, 200)}`
+            );
+            return;
+          }
+          if (!Array.isArray(products) || !(wrapper instanceof Element)) {
+            log(`Carousel ${index}: invalid products response`);
+            return;
+          }
+          log(`Carousel ${index}: received ${products.length} products`);
           wrapper.innerHTML = '';
 
           products.forEach((product) => {
@@ -134,10 +170,14 @@ function initCarousels() {
           });
 
           initSwiper();
+          log(`Carousel ${index}: swiper initialized after fetch`);
         })
-        .catch(() => {});
+        .catch((err) => {
+          log(`Carousel ${index}: fetch error ${err}`);
+        });
     } else if (hasSlides) {
       initSwiper();
+      log(`Carousel ${index}: swiper initialized with existing slides`);
     }
   });
 }
