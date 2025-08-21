@@ -26,3 +26,23 @@ function lb_jewelry_register_blocks() {
     register_block_type( __DIR__ . '/build/blocks/image-banner' );
 }
 add_action( 'init', 'lb_jewelry_register_blocks' );
+
+/**
+ * Simple REST endpoint for logging debug messages.
+ */
+function lbj_debug_log( WP_REST_Request $request ) {
+    $message   = $request->get_param( 'message' );
+    $timestamp = current_time( 'mysql' );
+    $line      = '[' . $timestamp . '] ' . $message . PHP_EOL;
+    $file      = '/var/www/debug.log';
+    file_put_contents( $file, $line, FILE_APPEND );
+    return rest_ensure_response( array( 'logged' => true ) );
+}
+
+add_action( 'rest_api_init', function() {
+    register_rest_route( 'lb-jewelry/v1', '/log', array(
+        'methods'             => 'POST',
+        'callback'            => 'lbj_debug_log',
+        'permission_callback' => '__return_true',
+    ) );
+} );
