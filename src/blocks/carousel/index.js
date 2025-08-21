@@ -96,13 +96,28 @@ registerBlockType('lb-jewelry/carousel', {
         '&per_page=10';
       log(`Editor carousel: fetching ${url}`);
       fetch(url)
-        .then((res) => res.json())
-        .then((data) => {
-          if (Array.isArray(data)) {
-            log(`Editor carousel: received ${data.length} products`);
-            setProducts(data);
-          } else {
-            log('Editor carousel: invalid products response');
+        .then((res) => {
+          log(
+            `Editor carousel: response status ${res.status} content-type ${res.headers.get(
+              'content-type'
+            )}`
+          );
+          return res.text();
+        })
+        .then((text) => {
+          try {
+            const data = JSON.parse(text);
+            if (Array.isArray(data)) {
+              log(`Editor carousel: received ${data.length} products`);
+              setProducts(data);
+            } else {
+              log('Editor carousel: invalid products response');
+              setProducts([]);
+            }
+          } catch (err) {
+            log(
+              `Editor carousel: JSON parse error ${err}; body: ${text.slice(0, 200)}`
+            );
             setProducts([]);
           }
         })

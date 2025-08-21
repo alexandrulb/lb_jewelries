@@ -115,10 +115,25 @@ function initCarousels() {
         '&attributes[0][slug]=jewelry' +
         '&per_page=10';
       log(`Carousel ${index}: fetching ${url}`);
-
       fetch(url)
-        .then((res) => res.json())
-        .then((products) => {
+        .then((res) => {
+          log(
+            `Carousel ${index}: response status ${res.status} content-type ${res.headers.get(
+              'content-type'
+            )}`
+          );
+          return res.text();
+        })
+        .then((text) => {
+          let products;
+          try {
+            products = JSON.parse(text);
+          } catch (err) {
+            log(
+              `Carousel ${index}: JSON parse error ${err}; body: ${text.slice(0, 200)}`
+            );
+            return;
+          }
           if (!Array.isArray(products) || !(wrapper instanceof Element)) {
             log(`Carousel ${index}: invalid products response`);
             return;
