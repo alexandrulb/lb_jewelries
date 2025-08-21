@@ -62,6 +62,19 @@ function getBrand(product) {
   return '';
 }
 
+// Send debug logs to server
+function log(message) {
+  try {
+    fetch('/wp-json/lb-jewelry/v1/log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message }),
+    });
+  } catch (e) {
+    // fail silently
+  }
+}
+
 registerBlockType('lb-jewelry/carousel', {
   edit: ({ attributes, setAttributes }) => {
     const {
@@ -81,10 +94,22 @@ registerBlockType('lb-jewelry/carousel', {
         '?attributes[0][attribute]=pa_product_type' +
         '&attributes[0][slug]=jewelry' +
         '&per_page=10';
+      log(`Editor carousel: fetching ${url}`);
       fetch(url)
         .then((res) => res.json())
-        .then((data) => (Array.isArray(data) ? setProducts(data) : setProducts([])))
-        .catch(() => setProducts([]));
+        .then((data) => {
+          if (Array.isArray(data)) {
+            log(`Editor carousel: received ${data.length} products`);
+            setProducts(data);
+          } else {
+            log('Editor carousel: invalid products response');
+            setProducts([]);
+          }
+        })
+        .catch((err) => {
+          log(`Editor carousel: fetch error ${err}`);
+          setProducts([]);
+        });
     }, [mode]);
 
     const addSlide = () =>
