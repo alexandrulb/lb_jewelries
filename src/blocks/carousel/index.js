@@ -75,6 +75,36 @@ function log(message) {
   }
 }
 
+async function fetchStoreJSON(url) {
+  log(`[fetch] ${url}`);
+  const res = await fetch(url, { credentials: 'same-origin' });
+  const ct = res.headers.get('content-type') || '';
+  const body = await res.text();
+  log(`[fetch] status=${res.status} ct=${ct} body[0..120]=${body.slice(0,120)}`);
+
+  if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+  if (!ct.includes('application/json')) throw new Error('Non-JSON response');
+
+  try { return JSON.parse(body); }
+  catch (e) { throw new Error(`JSON parse error: ${e?.message || e}`); }
+}
+
+function buildLatestUrl({ perPage = 10 } = {}) {
+  const u = new URL('/wp-json/wc/store/v1/products', window.location.origin);
+  u.searchParams.set('per_page', String(perPage));
+  u.searchParams.set('orderby', 'date');
+  u.searchParams.set('order', 'desc');
+  return u.toString();
+}
+
+function buildAttributeUrl({ perPage = 10 } = {}) {
+  const u = new URL('/wp-json/wc/store/v1/products', window.location.origin);
+  u.searchParams.set('per_page', String(perPage));
+  u.searchParams.set('attributes[0][attribute]', 'pa_product_type');
+  u.searchParams.set('attributes[0][slug]', 'jewelry');
+  return u.toString();
+}
+
 registerBlockType('lb-jewelry/carousel', {
   edit: ({ attributes, setAttributes }) => {
     const {
@@ -89,42 +119,24 @@ registerBlockType('lb-jewelry/carousel', {
 
     useEffect(() => {
       if (mode !== 'latest') return;
-      const url =
-        '/wp-json/wc/store/v1/products' +
-        '?attributes[0][attribute]=pa_product_type' +
-        '&attributes[0][slug]=jewelry' +
-        '&per_page=10';
-      log(`Editor carousel: fetching ${url}`);
-      fetch(url)
-        .then((res) => {
-          log(
-            `Editor carousel: response status ${res.status} content-type ${res.headers.get(
-              'content-type'
-            )}`
-          );
-          return res.text();
-        })
-        .then((text) => {
-          try {
-            const data = JSON.parse(text);
-            if (Array.isArray(data)) {
-              log(`Editor carousel: received ${data.length} products`);
-              setProducts(data);
-            } else {
-              log('Editor carousel: invalid products response');
-              setProducts([]);
-            }
-          } catch (err) {
-            log(
-              `Editor carousel: JSON parse error ${err}; body: ${text.slice(0, 200)}`
-            );
-            setProducts([]);
-          }
-        })
-        .catch((err) => {
-          log(`Editor carousel: fetch error ${err}`);
+
+      const tryLoad = async () => {
+        try {
+          const data = await fetchStoreJSON(buildAttributeUrl({ perPage: 10 }));
+          if (Array.isArray(data)) { setProducts(data); return; }
+        } catch (e) {
+          log(`Editor carousel: attribute query failed -> ${e.message}`);
+        }
+        try {
+          const data = await fetchStoreJSON(buildLatestUrl({ perPage: 10 }));
+          setProducts(Array.isArray(data) ? data : []);
+        } catch (e) {
+          log(`Editor carousel: latest fallback failed -> ${e.message}`);
           setProducts([]);
-        });
+        }
+      };
+
+      tryLoad();
     }, [mode]);
 
     const addSlide = () =>

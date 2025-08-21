@@ -48,6 +48,36 @@ function log(message) {
   }
 }
 
+async function fetchStoreJSON(url) {
+  log(`[fetch] ${url}`);
+  const res = await fetch(url, { credentials: 'same-origin' });
+  const ct = res.headers.get('content-type') || '';
+  const body = await res.text();
+  log(`[fetch] status=${res.status} ct=${ct} body[0..120]=${body.slice(0,120)}`);
+
+  if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+  if (!ct.includes('application/json')) throw new Error('Non-JSON response');
+
+  try { return JSON.parse(body); }
+  catch (e) { throw new Error(`JSON parse error: ${e?.message || e}`); }
+}
+
+function buildLatestUrl({ perPage = 10 } = {}) {
+  const u = new URL('/wp-json/wc/store/v1/products', window.location.origin);
+  u.searchParams.set('per_page', String(perPage));
+  u.searchParams.set('orderby', 'date');
+  u.searchParams.set('order', 'desc');
+  return u.toString();
+}
+
+function buildAttributeUrl({ perPage = 10 } = {}) {
+  const u = new URL('/wp-json/wc/store/v1/products', window.location.origin);
+  u.searchParams.set('per_page', String(perPage));
+  u.searchParams.set('attributes[0][attribute]', 'pa_product_type');
+  u.searchParams.set('attributes[0][slug]', 'jewelry');
+  return u.toString();
+}
+
 function initCarousels() {
   document.querySelectorAll('.wpgcb-carousel').forEach((el, index) => {
     if (el.dataset.initialized === 'true') return;
@@ -58,7 +88,7 @@ function initCarousels() {
     const mode = el.dataset.mode || 'latest';
     log(`Carousel ${index}: mode=${mode}`);
 
-    const swiperEl = el.querySelector('.swiper');
+    const swiperEl = el.classList.contains('swiper') ? el : el.querySelector('.swiper');
     const wrapper  = el.querySelector('.swiper-wrapper');
     const hasSlides = wrapper && wrapper.children.length > 0;
     log(`Carousel ${index}: hasSlides=${hasSlides}`);
@@ -109,75 +139,56 @@ function initCarousels() {
 
     // Latest mode loads products dynamically
     if (mode === 'latest' && !hasSlides) {
-      const url =
-        '/wp-json/wc/store/v1/products' +
-        '?attributes[0][attribute]=pa_product_type' +
-        '&attributes[0][slug]=jewelry' +
-        '&per_page=10';
-      log(`Carousel ${index}: fetching ${url}`);
-      fetch(url)
-        .then((res) => {
-          log(
-            `Carousel ${index}: response status ${res.status} content-type ${res.headers.get(
-              'content-type'
-            )}`
-          );
-          return res.text();
-        })
-        .then((text) => {
-          let products;
-          try {
-            products = JSON.parse(text);
-          } catch (err) {
-            log(
-              `Carousel ${index}: JSON parse error ${err}; body: ${text.slice(0, 200)}`
-            );
-            return;
-          }
-          if (!Array.isArray(products) || !(wrapper instanceof Element)) {
-            log(`Carousel ${index}: invalid products response`);
-            return;
-          }
-          log(`Carousel ${index}: received ${products.length} products`);
-          wrapper.innerHTML = '';
-
-          products.forEach((product) => {
-            const imgSrc = product.images?.[0]?.src;
-            if (!imgSrc) return;
-
-            const slide = document.createElement('div');
-            slide.className = 'swiper-slide';
-
-            const img = document.createElement('img');
-            img.src = imgSrc;
-            img.alt = product.name || '';
-            slide.appendChild(img);
-
-            const brand = getBrand(product);
-            if (brand) {
-              const brandEl = document.createElement('div');
-              brandEl.className = 'product-brand';
-              brandEl.textContent = brand;
-              slide.appendChild(brandEl);
-            }
-
-            const titleEl = document.createElement('div');
-            titleEl.className = 'product-title';
-            titleEl.textContent = product.name || '';
-            slide.appendChild(titleEl);
-
-            wrapper.appendChild(slide);
-          });
-
+      const load = async () => {
+        try {
+          const products = await fetchStoreJSON(buildAttributeUrl({ perPage: 10 }));
+          renderSlides(products);
           initSwiper();
-          log(`Carousel ${index}: swiper initialized after fetch`);
-        })
-        .catch((err) => {
-          log(`Carousel ${index}: fetch error ${err}`);
-        });
+          log(`Carousel ${index}: swiper initialized after attribute fetch`);
+          return;
+        } catch (e) {
+          log(`Carousel ${index}: attribute fetch failed -> ${e.message}`);
+        }
+        try {
+          const products = await fetchStoreJSON(buildLatestUrl({ perPage: 10 }));
+          renderSlides(products);
+          initSwiper();
+          log(`Carousel ${index}: swiper initialized after latest fallback`);
+        } catch (e) {
+          log(`Carousel ${index}: latest fallback failed -> ${e.message}`);
+        }
+      };
+      load();
     } else if (hasSlides) {
       initSwiper();
       log(`Carousel ${index}: swiper initialized with existing slides`);
+    }
+
+    function renderSlides(products) {
+      if (!Array.isArray(products) || !(wrapper instanceof Element)) return;
+      wrapper.innerHTML = '';
+      products.forEach((product) => {
+        const imgSrc = product.images?.[0]?.src;
+        if (!imgSrc) return;
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide';
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        img.alt = product.name || '';
+        slide.appendChild(img);
+        const brand = getBrand(product);
+        if (brand) {
+          const brandEl = document.createElement('div');
+          brandEl.className = 'product-brand';
+          brandEl.textContent = brand;
+          slide.appendChild(brandEl);
+        }
+        const titleEl = document.createElement('div');
+        titleEl.className = 'product-title';
+        titleEl.textContent = product.name || '';
+        slide.appendChild(titleEl);
+        wrapper.appendChild(slide);
+      });
     }
   });
 }
