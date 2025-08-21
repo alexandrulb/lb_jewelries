@@ -113,7 +113,6 @@ function initCarousels() {
         '/wp-json/wc/store/v1/products' +
         '?attributes[0][attribute]=pa_product_type' +
         '&attributes[0][slug]=jewelry' +
-        '&offset=200' +
         '&per_page=10';
       log(`Carousel ${index}: fetching ${url}`);
       fetch(url)

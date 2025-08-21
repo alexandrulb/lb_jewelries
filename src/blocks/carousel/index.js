@@ -93,7 +93,6 @@ registerBlockType('lb-jewelry/carousel', {
         '/wp-json/wc/store/v1/products' +
         '?attributes[0][attribute]=pa_product_type' +
         '&attributes[0][slug]=jewelry' +
-        '&offset=200' +
         '&per_page=10';
       log(`Editor carousel: fetching ${url}`);
       fetch(url)
